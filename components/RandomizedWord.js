@@ -50,6 +50,7 @@ export default ({ text, star, hovered }) => {
 const Word = styled.span`
   color: white;
   opacity: 0.3;
+  text-align: right;
   font-weight: lighter;
   letter-spacing: 2px;
   font-family: ${space_grotesk.style.fontFamily};

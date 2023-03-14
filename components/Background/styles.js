@@ -22,8 +22,8 @@ export const StarHighlight = styled.div`
 
 export const StarContainer = styled.div`
   position: absolute;
-  top: ${({ top }) => top}%;
-  left: ${({ left }) => left}%;
+  top: ${({ top }) => Math.min(Math.max(top, 5 - Math.random() * 2), 94 - Math.random() * 5)}%;
+  left: ${({ left }) => Math.min(Math.max(left, 5 - Math.random() * 2), 94 - Math.random() * 5)}%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -39,7 +39,7 @@ export const StarContainer = styled.div`
   }
 
   &:hover .name {
-    transform: scale(1.5) translateY(${({ size }) => size * 3.5}px);
+    transform: scale(1.5) translateY(${({ size }) => size * 3}px);
     * {
       opacity: 1;
     }

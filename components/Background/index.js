@@ -8,8 +8,8 @@ const generateStars = (amount) => {
     let top = Math.floor(Math.random() * 100);
     let left = Math.floor(Math.random() * 100);
     if (stars.some((s) => Math.abs(s.top - top) < 2 && Math.abs(s.left - left) < 2)) {
-      top += 3;
-      left += 3;
+      top += top > 95 ? -5 : 5;
+      left += left > 95 ? -5 : 5;
     }
     const size = Math.floor(Math.random() * 3) + 2;
     const minOpacity = 0.5;
