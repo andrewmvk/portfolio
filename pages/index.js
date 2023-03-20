@@ -3,8 +3,7 @@ import styled from 'styled-components';
 import { Canvas } from '@react-three/fiber';
 import Planet from '../components/Planet';
 import { OrbitControls } from '@react-three/drei';
-import Background from '../components/Background';
-import RandomizedWord from '../components/RandomizedWord';
+import WordsSphere from '../components/WordsSphere';
 
 export default function Home() {
   return (
@@ -17,19 +16,19 @@ export default function Home() {
           <Planet />
         </Suspense>
       </Canvas> */}
-      {/* <RandomizedWord text="TEXTO PARA VER A PALAVRA" /> */}
-      <Background />
+      <WordsSphere />
     </Container>
   );
 }
 
 const Container = styled.div`
-  height: 960px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
   width: 100%;
+  padding: 0;
+  margin: 0;
   justify-content: center;
   align-items: center;
-
-  canvas {
-    height: 90%;
-  }
 `;
