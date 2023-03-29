@@ -10,9 +10,11 @@
     "@react-three/fiber": "^8.11.6",
     "@types/three": "^0.149.0",
     "canvas": "^2.11.0",
+    "maath": "^0.5.3",
     "next": "latest",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-icons": "^4.8.0",
     "styled-components": "^5.3.8",
     "three": "^0.150.1"
   },

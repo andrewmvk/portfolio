@@ -4,6 +4,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Html, OrbitControls, Point, PointMaterial, Points, Stars } from '@react-three/drei';
 import { StarCircle, StarTitle } from './styles';
 import Planet from '../Planet';
+import { random } from 'maath';
 
 const data = [
   'REACT',
@@ -86,15 +87,16 @@ function Word({ children, revealedWord, position }) {
 }
 
 function Cloud({ radius = 100, isDragging, mouseTrack }) {
+  const [sphere] = useState(() => random.inSphere(new Float32Array(5000), { radius: 10 }));
   const cloudsRef = useRef();
 
   useFrame((state, delta) => {
-    cloudsRef.current.rotation.x -= delta / 10;
-    cloudsRef.current.rotation.y -= delta / 15;
+    cloudsRef.current.position.z -= delta / 10;
   });
 
   useEffect(() => {
     if (cloudsRef.current && isDragging) {
+      console.log(cloudsRef.current);
       cloudsRef.current.rotation.x += mouseTrack.y * 0.002;
       cloudsRef.current.rotation.y += mouseTrack.x * 0.002;
     }
@@ -103,8 +105,8 @@ function Cloud({ radius = 100, isDragging, mouseTrack }) {
   const words = useMemo(() => {
     const temp = [];
     const spherical = new THREE.Spherical();
-    const phiSpan = Math.PI / (data.length + 1);
-    const thetaSpan = (Math.PI * 2) / data.length;
+    const thetaSpan = Math.PI * 2;
+    const phiSpan = Math.PI;
 
     for (let i = 0; i < data.length; i++) {
       let word = '';
@@ -123,14 +125,23 @@ function Cloud({ radius = 100, isDragging, mouseTrack }) {
   }, [radius]);
 
   return (
-    <group ref={cloudsRef}>
-      <Points>
+    <group>
+      <Points ref={cloudsRef} positions={sphere} stride={3} frustumCulled={false}>
+        <PointMaterial
+          transparent
+          color="#ffffff"
+          size={0.005}
+          sizeAttenuation={true}
+          depthWrite={false}
+        />
+      </Points>
+      {/* <Points>
         <PointMaterial transparent vertexColors sizeAttenuation depthWrite={false} />
         {words.map(([pos, word, revealedWord], index) => (
           <Word key={index} revealedWord={revealedWord} position={pos} children={word} />
         ))}
-      </Points>
-      <Stars fade speed={0.5} />
+      </Points> */}
+      {/* <Stars fade speed={0.5} /> */}
     </group>
   );
 }
@@ -162,10 +173,9 @@ export default () => {
     >
       <ambientLight intensity={0.1} />
       <pointLight position={[10, 10, 10]} />
-      <Suspense fallback={null}>
+      {/* <Suspense fallback={null}>
         <Planet position={[0, -2.5, 0]} isDragging={isDragging} mouseTrack={mouseTrack} />
-      </Suspense>
-      {/* <OrbitControls enableZoom={false} target={[0, 0, 0]} rotateSpeed={0.5} position={[0, 0, 5]} /> */}
+      </Suspense> */}
       <Cloud radius={200} isDragging={isDragging} mouseTrack={mouseTrack} />
     </Canvas>
   );
