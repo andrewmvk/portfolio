@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import StarsBackground from '../components/StarsBackground';
@@ -16,38 +16,37 @@ function useLerpedMouse() {
   return lerped;
 }
 
-const CustomStars = ({ velocity }) => {
-  const ref = useRef();
+const CustomStars = React.forwardRef((props, ref) => {
+  const posRef = useRef();
   const mouse = useLerpedMouse();
 
   useFrame(() => {
-    if (ref.current) {
-      ref.current.rotation.y = (mouse.current.x * Math.PI) / 50;
-      ref.current.rotation.x = (mouse.current.y * Math.PI) / 100;
-      ref.current.position.x = mouse.current.x * 100;
-      ref.current.position.y = mouse.current.y * 30;
+    if (posRef.current) {
+      posRef.current.rotation.y = (mouse.current.x * Math.PI) / 50;
+      posRef.current.rotation.x = (mouse.current.y * Math.PI) / 100;
+      posRef.current.position.x = mouse.current.x * 100;
+      posRef.current.position.y = mouse.current.y * 30;
     }
   });
 
   return (
-    <group ref={ref} position={[0, 0, 0]}>
-      <StarsBackground velocity={velocity} />
+    <group ref={posRef} position={[0, 0, 0]}>
+      <StarsBackground ref={ref} />
     </group>
   );
-};
+});
 
 export default function Home() {
-  const [velocity, setVelocity] = useState(1);
-  const maxV = 30;
-  const opacity = 1 - (velocity * 2) / maxV;
+  const starsRef = useRef(1);
+  const maxVelocity = 30;
 
   const onHeaderClick = (index) => {
     const acceleration = 0.1;
-    let newVelocity = velocity;
+    let newVelocity = starsRef.current;
     const interval = setInterval(() => {
       newVelocity += acceleration;
-      setVelocity(newVelocity);
-      if (newVelocity >= maxV) clearInterval(interval);
+      starsRef.current = newVelocity;
+      if (newVelocity >= maxVelocity) clearInterval(interval);
     }, 10);
   };
 
@@ -62,10 +61,10 @@ export default function Home() {
         </Suspense>
       </Canvas> */}
       {/* <WordsSphere /> */}
-      <Header onClick={onHeaderClick} opacity={opacity} maxV={maxV} />
-      <Title style={{ opacity }}>O UNIVERSO DO DESENVOLVIMENTO WEB</Title>
+      <Header onClick={onHeaderClick} />
+      <Title>O UNIVERSO DO DESENVOLVIMENTO WEB</Title>
       <Canvas style={{ backgroundColor: '#131416', zIndex: 1 }} camera={{ fov: 90 }}>
-        <CustomStars velocity={velocity} />
+        <CustomStars ref={starsRef} />
       </Canvas>
     </Container>
   );
