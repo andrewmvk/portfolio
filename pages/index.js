@@ -4,6 +4,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import StarsBackground from '../components/StarsBackground';
 import { Space_Grotesk } from 'next/font/google';
 import Header from '../components/Header';
+import { Html } from '@react-three/drei';
 
 const space_grotesk = Space_Grotesk({ subsets: ['latin'] });
 
@@ -16,12 +17,21 @@ function useLerpedMouse() {
   return lerped;
 }
 
-const CustomStars = React.forwardRef((props, ref) => {
+const StarsScreen = React.forwardRef((props, ref) => {
   const posRef = useRef();
+  const textRef = useRef([]);
   const mouse = useLerpedMouse();
 
-  useFrame(() => {
-    if (posRef.current) {
+  useFrame((state) => {
+    if (posRef.current && textRef.current) {
+      const viewport = state.viewport.getCurrentViewport(state.camera, [0, 0, 0]);
+      const x = (state.pointer.x * 100 * viewport.width) / 2;
+      const y = (-1 * state.pointer.y * 100 * viewport.height) / 2;
+      textRef.current.forEach((text) => {
+        text.style.backgroundPositionX = (mouse.current.x * 100 * viewport.width) / 2 + 'px';
+        text.style.backgroundPositionY = (-mouse.current.y * 100 * viewport.height) / 2 + 'px';
+      });
+
       posRef.current.rotation.y = (mouse.current.x * Math.PI) / 50;
       posRef.current.rotation.x = (mouse.current.y * Math.PI) / 100;
       posRef.current.position.x = mouse.current.x * 100;
@@ -30,22 +40,35 @@ const CustomStars = React.forwardRef((props, ref) => {
   });
 
   return (
-    <group ref={posRef} position={[0, 0, 0]}>
-      <StarsBackground ref={ref} />
-    </group>
+    <>
+      <Html fullscreen>
+        <TextContainer>
+          <Title style={{ paddingBottom: 50 }} ref={(r) => (textRef.current[0] = r)}>
+            O UNIVERSO DO DESENVOLVIMENTO WEB
+          </Title>
+          <Subtitle style={{ paddingTop: 25 }} ref={(r) => (textRef.current[1] = r)}>
+            UMA VIAGEM DE CONHECIMENTO E CRIATIVIDADE
+          </Subtitle>
+        </TextContainer>
+      </Html>
+      <group ref={posRef} position={[0, 0, 0]}>
+        <StarsBackground ref={ref} />
+      </group>
+    </>
   );
 });
 
 export default function Home() {
-  const starsRef = useRef(1);
+  const initialVelocity = 1;
   const maxVelocity = 30;
+  const starsRef = useRef([initialVelocity, initialVelocity, maxVelocity]);
 
   const onHeaderClick = (index) => {
     const acceleration = 0.1;
-    let newVelocity = starsRef.current;
+    let newVelocity = starsRef.current[1];
     const interval = setInterval(() => {
       newVelocity += acceleration;
-      starsRef.current = newVelocity;
+      starsRef.current[1] = newVelocity;
       if (newVelocity >= maxVelocity) clearInterval(interval);
     }, 10);
   };
@@ -62,9 +85,8 @@ export default function Home() {
       </Canvas> */}
       {/* <WordsSphere /> */}
       <Header onClick={onHeaderClick} />
-      <Title>O UNIVERSO DO DESENVOLVIMENTO WEB</Title>
-      <Canvas style={{ backgroundColor: '#131416', zIndex: 1 }} camera={{ fov: 90 }}>
-        <CustomStars ref={starsRef} />
+      <Canvas style={{ backgroundColor: '#101010', zIndex: 1 }} camera={{ fov: 90 }}>
+        <StarsScreen ref={starsRef} />
       </Canvas>
     </Container>
   );
@@ -82,17 +104,50 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const Title = styled.div`
+const TextContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
   font-family: ${space_grotesk.style.fontFamily};
-  font-size: 60px;
+`;
+
+const Title = styled.div`
   position: absolute;
-  color: white;
-  transform: translate(-50%, -50%);
-  transition: all 0.3s ease-in-out;
-  width: 75%;
-  top: 50%;
-  left: 50%;
-  text-align: center;
-  z-index: 2;
+  width: 200%;
+  height: 200%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translate(-25%, -25%);
+  z-index: 1;
+  font-size: 60px;
+  font-weight: bold;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0) 5%, rgba(255, 255, 255, 1) 5.5%)
+    no-repeat;
+  background-size: cover;
+  -webkit-text-stroke: 0.5px #fff;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  pointer-events: none;
+`;
+
+const Subtitle = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: ${space_grotesk.style.fontFamily};
+  font-size: 35px;
+  font-weight: bold;
+  background: radial-gradient(circle, rgba(255, 255, 255, 1) 10%, rgba(255, 255, 255, 0) 10.5%)
+    no-repeat;
+  background-size: cover;
+  -webkit-text-stroke: 0.5px #fff;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   pointer-events: none;
 `;

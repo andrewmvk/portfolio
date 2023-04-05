@@ -1,7 +1,7 @@
 export const colors = {
   text: '#ffffff',
   highlight: '#fad041',
-  background: '#131416',
+  background: '#101010',
 };
 
 export const fontSize = {

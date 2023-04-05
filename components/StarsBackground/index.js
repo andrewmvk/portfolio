@@ -8,7 +8,6 @@ const amount = 5000; //Stars amount
 const boxSize = 2000; //Stars spread radius
 const rotation = 0.001; //Stars rotation over time
 const maxTailLength = 50; //The maximum length of the star's tail
-const velocity = 1;
 
 const Generate = () => {
   const starsVertices = [];
@@ -28,41 +27,50 @@ const starsGeometry = new THREE.BufferGeometry();
 starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starsVertices, 3));
 
 export default React.forwardRef(function StarsBackground(props, ref) {
-  const starRefOne = useRef();
-  const starRefTwo = useRef();
-  const lineGeoRef = useRef([]);
+  const starRef = useRef([]);
   const segmentsRef = useRef([]);
 
   useFrame(() => {
-    if (starRefOne.current && starRefTwo.current) {
-      starRefOne.current.rotation.z += rotation;
-      starRefOne.current.position.z += ref.current;
-      starRefTwo.current.rotation.z += rotation;
-      starRefTwo.current.position.z += ref.current;
+    if (starRef.current) {
+      const initialVelocity = ref.current[0];
+      const currentVelocity = ref.current[1];
+      const maxVelocity = ref.current[2];
 
-      segmentsRef.current.forEach((segment) => {
-        const prevEnd = segment.end;
-        const newEnd = prevEnd.z - ref.current / 70;
-        const tailLength = Math.abs(newEnd - segment.start.z);
-        if (tailLength < maxTailLength) segment.end.set(prevEnd.x, prevEnd.y, newEnd);
+      starRef.current.forEach((group) => {
+        group.rotation.z += rotation;
+        group.position.z += currentVelocity;
+
+        if (group.position.z > boxSize) {
+          group.position.z = -(boxSize / 2 + 1);
+        }
+
+        if (currentVelocity != initialVelocity) {
+          const points = group.children[0];
+          const newOpacity = (maxVelocity - currentVelocity) / (maxVelocity - 1);
+          points.material.opacity = newOpacity;
+
+          const segment = group.children[1];
+          segment.material.linewidth = Math.min(
+            0.6,
+            segment.material.linewidth + currentVelocity * 0.0008,
+          );
+        }
       });
 
-      lineGeoRef.current.forEach((geo) => {
-        if (geo)
-          geo.material.linewidth = Math.min(1, geo.material.linewidth + ref.current * 0.0008);
-      });
-
-      if (starRefOne.current.position.z > boxSize) {
-        starRefOne.current.position.z = -(boxSize / 2 + 1);
-      } else if (starRefTwo.current.position.z > boxSize) {
-        starRefTwo.current.position.z = -(boxSize / 2 + 1);
+      if (currentVelocity != initialVelocity) {
+        segmentsRef.current.forEach((segment) => {
+          const prevEnd = segment.end;
+          const newEnd = prevEnd.z - currentVelocity / 70;
+          const tailLength = Math.abs(newEnd - segment.start.z);
+          if (tailLength < maxTailLength) segment.end.set(prevEnd.x, prevEnd.y, newEnd);
+        });
       }
     }
   });
 
   return (
     <>
-      <group ref={starRefOne}>
+      <group ref={(r) => (starRef.current[0] = r)}>
         <points>
           <bufferGeometry attach="geometry" {...starsGeometry} />
           <PointMaterial
@@ -74,7 +82,7 @@ export default React.forwardRef(function StarsBackground(props, ref) {
             depthWrite={false}
           />
         </points>
-        <Segments ref={(r) => (lineGeoRef.current[0] = r)} lineWidth={0} limit={amount + 1}>
+        <Segments lineWidth={0} limit={amount + 1}>
           {segmentVertices.map((star, i) => {
             return (
               <Segment
@@ -88,7 +96,7 @@ export default React.forwardRef(function StarsBackground(props, ref) {
           })}
         </Segments>
       </group>
-      <group ref={starRefTwo} position={[0, 0, -boxSize / 2]}>
+      <group ref={(r) => (starRef.current[1] = r)} position={[0, 0, -boxSize / 2]}>
         <points>
           <bufferGeometry attach="geometry" {...starsGeometry} />
           <PointMaterial
@@ -100,7 +108,7 @@ export default React.forwardRef(function StarsBackground(props, ref) {
             depthWrite={false}
           />
         </points>
-        <Segments ref={(r) => (lineGeoRef.current[1] = r)} lineWidth={0} limit={amount + 1}>
+        <Segments lineWidth={0} limit={amount + 1}>
           {segmentVertices.map((star, i) => {
             return (
               <Segment
