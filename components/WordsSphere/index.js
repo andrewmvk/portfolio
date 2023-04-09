@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import { useRef, useState, useMemo, useCallback, Suspense, useEffect } from 'react';
+import React, { useRef, useState, useMemo, useCallback, Suspense, useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { Html, OrbitControls, Point, PointMaterial, Points, Stars } from '@react-three/drei';
+import { Html, Point, PointMaterial, Points, Stars } from '@react-three/drei';
 import { StarCircle, StarTitle } from './styles';
 import Planet from '../Planet';
 import { random } from 'maath';
@@ -86,21 +86,19 @@ function Word({ children, revealedWord, position }) {
   );
 }
 
-function Cloud({ radius = 100, isDragging, mouseTrack }) {
-  const [sphere] = useState(() => random.inSphere(new Float32Array(5000), { radius: 10 }));
+const Cloud = React.forwardRef((props, ref) => {
+  // const [sphere] = useState(() => random.inSphere(new Float32Array(5000), { radius: 10 }));
   const cloudsRef = useRef();
 
-  useFrame((state, delta) => {
-    cloudsRef.current.position.z -= delta / 10;
+  useFrame(({ clock }) => {
+    // if (ref.current?.isDragging && cloudsRef.current) {
+    //   cloudsRef.current.rotation.x += ref.current.y * 0.002;
+    //   cloudsRef.current.rotation.y += ref.current.x * 0.002;
+    // }
+    // const elapsedTime = clock.getElapsedTime(); // Get the elapsed time since the component mounted
+    // cloudsRef.current.rotation.y = (-29 * Math.PI) / 180; // Rotate the sphere around the y-axis
+    // cloudsRef.current.rotation.z = elapsedTime / 6;
   });
-
-  useEffect(() => {
-    if (cloudsRef.current && isDragging) {
-      console.log(cloudsRef.current);
-      cloudsRef.current.rotation.x += mouseTrack.y * 0.002;
-      cloudsRef.current.rotation.y += mouseTrack.x * 0.002;
-    }
-  }, [mouseTrack]);
 
   const words = useMemo(() => {
     const temp = [];
@@ -114,19 +112,19 @@ function Cloud({ radius = 100, isDragging, mouseTrack }) {
         word += LETTERS[Math.floor(Math.random() * 26)];
       }
 
-      const phi = phiSpan * Math.random() * radius;
-      const theta = thetaSpan * Math.random() * radius;
+      const phi = phiSpan * Math.random() * props.radius;
+      const theta = thetaSpan * Math.random() * props.radius;
 
-      const wordPos = new THREE.Vector3().setFromSpherical(spherical.set(radius, phi, theta));
+      const wordPos = new THREE.Vector3().setFromSpherical(spherical.set(props.radius, phi, theta));
 
       temp.push([wordPos, word, data[i]]);
     }
     return temp;
-  }, [radius]);
+  }, [props.radius]);
 
   return (
-    <group>
-      <Points ref={cloudsRef} positions={sphere} stride={3} frustumCulled={false}>
+    <group ref={cloudsRef}>
+      {/* <Points positions={sphere} stride={3} frustumCulled={false}>
         <PointMaterial
           transparent
           color="#ffffff"
@@ -134,32 +132,32 @@ function Cloud({ radius = 100, isDragging, mouseTrack }) {
           sizeAttenuation={true}
           depthWrite={false}
         />
-      </Points>
-      {/* <Points>
+      </Points> */}
+      <Points>
         <PointMaterial transparent vertexColors sizeAttenuation depthWrite={false} />
         {words.map(([pos, word, revealedWord], index) => (
           <Word key={index} revealedWord={revealedWord} position={pos} children={word} />
         ))}
-      </Points> */}
-      {/* <Stars fade speed={0.5} /> */}
+      </Points>
+      <Stars fade speed={0.5} />
     </group>
   );
-}
+});
 
 export default () => {
-  const [isDragging, setIsDragging] = useState(false);
-  const [mouseTrack, setMouseTrack] = useState({ x: 0, y: 0 });
+  const mouseTrack = useRef({ x: 0, y: 0, isDragging: false });
 
   const handleMouseMove = useCallback((event) => {
-    setMouseTrack({ x: event.movementX, y: event.movementY });
+    mouseTrack.current.x = event.clientX;
+    mouseTrack.current.y = event.clientY;
   }, []);
 
   const handleMouseDown = useCallback(() => {
-    setIsDragging(true);
+    mouseTrack.current.isDragging = true;
   }, []);
 
   const handleMouseUp = useCallback(() => {
-    setIsDragging(false);
+    mouseTrack.current.isDragging = false;
   }, []);
 
   return (
@@ -167,16 +165,16 @@ export default () => {
       onMouseMove={handleMouseMove}
       onPointerDown={handleMouseDown}
       onPointerUp={handleMouseUp}
-      style={{ backgroundColor: '#131416', outline: 'none', border: 'none', padding: 0 }}
+      style={{ backgroundColor: '#101010', outline: 'none', border: 'none', padding: 0 }}
       resize={{ scroll: false }}
-      camera={{ position: [0, 0, 1], fov: 75 }}
+      camera={{ position: [0, 0, 0], fov: 75 }}
     >
       <ambientLight intensity={0.1} />
       <pointLight position={[10, 10, 10]} />
-      {/* <Suspense fallback={null}>
-        <Planet position={[0, -2.5, 0]} isDragging={isDragging} mouseTrack={mouseTrack} />
-      </Suspense> */}
-      <Cloud radius={200} isDragging={isDragging} mouseTrack={mouseTrack} />
+      <Suspense fallback={null}>
+        <Planet position={[0, -2.5, 0]} ref={mouseTrack} />
+      </Suspense>
+      <Cloud radius={200} ref={mouseTrack} />
     </Canvas>
   );
 };

@@ -4,7 +4,8 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import StarsBackground from '../components/StarsBackground';
 import { Space_Grotesk } from 'next/font/google';
 import Header from '../components/Header';
-import { Html } from '@react-three/drei';
+import { Html, OrbitControls } from '@react-three/drei';
+import WordsSphere from '../components/WordsSphere';
 
 const space_grotesk = Space_Grotesk({ subsets: ['latin'] });
 
@@ -83,11 +84,15 @@ export default function Home() {
           <Planet />
         </Suspense>
       </Canvas> */}
-      {/* <WordsSphere /> */}
+      <WordsSphere />
       <Header onClick={onHeaderClick} />
-      <Canvas style={{ backgroundColor: '#101010', zIndex: 1 }} camera={{ fov: 90 }}>
+      {/* <Canvas
+        onLoadStart={(a) => console.log(a)}
+        style={{ backgroundColor: '#101010', zIndex: 1 }}
+        camera={{ fov: 90 }}
+      >
         <StarsScreen ref={starsRef} />
-      </Canvas>
+      </Canvas> */}
     </Container>
   );
 }
@@ -123,6 +128,7 @@ const Title = styled.div`
   z-index: 1;
   font-size: 60px;
   font-weight: bold;
+  background-position: 0px 0px;
   background: radial-gradient(circle, rgba(255, 255, 255, 0) 5%, rgba(255, 255, 255, 1) 5.5%)
     no-repeat;
   background-size: cover;
@@ -143,6 +149,7 @@ const Subtitle = styled.div`
   font-family: ${space_grotesk.style.fontFamily};
   font-size: 35px;
   font-weight: bold;
+  background-position: 0px 0px;
   background: radial-gradient(circle, rgba(255, 255, 255, 1) 10%, rgba(255, 255, 255, 0) 10.5%)
     no-repeat;
   background-size: cover;
