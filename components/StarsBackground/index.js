@@ -32,23 +32,29 @@ export default React.forwardRef(function StarsBackground(props, ref) {
 
   useFrame(() => {
     if (starRef.current) {
-      const initialVelocity = ref.current[0];
-      const currentVelocity = ref.current[1];
-      const maxVelocity = ref.current[2];
+      const initialVelocity = ref.current.stars.initialVelocity;
+      const currentVelocity = ref.current.stars.currentVelocity;
+      const maxVelocity = ref.current.stars.maxVelocity;
 
       starRef.current.forEach((group) => {
+        //Rotate and move the stars towards the camera
         group.rotation.z += rotation;
         group.position.z += currentVelocity;
 
         if (group.position.z > boxSize) {
-          group.position.z = -(boxSize / 2 + 1);
+          //When a stars group's extreme backside reaches the camera
+          group.position.z = -(boxSize / 2);
+          //The position of the stars group is "reseted"
         }
 
         if (currentVelocity != initialVelocity) {
-          const points = group.children[0];
+          //If it starts to move more quickly than...
+          const points = group.children[0]; //Stars points material
           const newOpacity = (maxVelocity - currentVelocity) / (maxVelocity - 1);
-          points.material.opacity = newOpacity;
+          //Opacity mapped relative to the stars velocity
+          points.material.opacity = newOpacity * 0.5;
 
+          //Here the stars segment starts to appear and become more thick
           const segment = group.children[1];
           segment.material.linewidth = Math.min(
             0.6,
@@ -58,6 +64,7 @@ export default React.forwardRef(function StarsBackground(props, ref) {
       });
 
       if (currentVelocity != initialVelocity) {
+        //Here all the segments get longer relative to the initial velocity divided by a factor
         segmentsRef.current.forEach((segment) => {
           const prevEnd = segment.end;
           const newEnd = prevEnd.z - currentVelocity / 70;

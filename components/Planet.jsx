@@ -33,14 +33,14 @@ export default React.forwardRef((props, ref) => {
       const { width, height } = viewport.getCurrentViewport(camera, [0, 0, 0]);
 
       //smothing the mouse position change
-      const valueX = lerp(mouseRef.current.x, ref.current.x);
-      const valueY = lerp(mouseRef.current.y, ref.current.y);
+      const valueX = lerp(mouseRef.current.x, ref.current.mouseTrack.x);
+      const valueY = lerp(mouseRef.current.y, ref.current.mouseTrack.y);
 
       mouseRef.current = { x: valueX, y: valueY };
 
       //calculate the mouse position relative to the current viewport width and height
-      const mouseX = (lerp(mouseRef.current.x, ref.current.x) / (width * 170)) * 2 - 1; //#why 170 factor? idk, it works
-      const mouseY = (lerp(mouseRef.current.y, ref.current.y) / (height * 170)) * 2 - 1;
+      const mouseX = (valueX / (width * 170)) * 2 - 1; //#why 170 factor? idk, it works
+      const mouseY = (valueY / (height * 170)) * 2 - 1;
 
       //calculate the angle of the camera target relative to the mouse position
       const angleX = theta - Math.PI / (3 + mouseX); //in radians

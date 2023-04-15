@@ -37,7 +37,9 @@ export const Title = styled.div`
     display: flex;
     flex-direction: row;
     gap: 10px;
+    z-index: 2;
     * {
+      z-index: 2;
       transition: all 0.3s ease-in-out;
     }
   }

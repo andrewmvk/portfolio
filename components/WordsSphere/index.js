@@ -144,37 +144,19 @@ const Cloud = React.forwardRef((props, ref) => {
   );
 });
 
-export default () => {
-  const mouseTrack = useRef({ x: 0, y: 0, isDragging: false });
-
-  const handleMouseMove = useCallback((event) => {
-    mouseTrack.current.x = event.clientX;
-    mouseTrack.current.y = event.clientY;
-  }, []);
-
-  const handleMouseDown = useCallback(() => {
-    mouseTrack.current.isDragging = true;
-  }, []);
-
-  const handleMouseUp = useCallback(() => {
-    mouseTrack.current.isDragging = false;
+export default React.forwardRef((props, ref) => {
+  useEffect(() => {
+    props.setReady();
   }, []);
 
   return (
-    <Canvas
-      onMouseMove={handleMouseMove}
-      onPointerDown={handleMouseDown}
-      onPointerUp={handleMouseUp}
-      style={{ backgroundColor: '#101010', outline: 'none', border: 'none', padding: 0 }}
-      resize={{ scroll: false }}
-      camera={{ position: [0, 0, 0], fov: 75 }}
-    >
+    <>
       <ambientLight intensity={0.1} />
       <pointLight position={[10, 10, 10]} />
       <Suspense fallback={null}>
-        <Planet position={[0, -2.5, 0]} ref={mouseTrack} />
+        <Planet position={[0, -2.5, 0]} ref={ref} />
       </Suspense>
-      <Cloud radius={200} ref={mouseTrack} />
-    </Canvas>
+      <Cloud radius={200} ref={ref} />
+    </>
   );
-};
+});
