@@ -8,29 +8,9 @@ import Header from '../components/Header';
 import { Html, OrbitControls } from '@react-three/drei';
 import WordsSphere from '../components/WordsSphere';
 import StarsList from '../components/StarsList';
+import { tools } from '../styles/constants';
 
 const space_grotesk = Space_Grotesk({ subsets: ['latin'] });
-
-const data = [
-  'REACT.JS',
-  'CSS',
-  'HTML',
-  'JAVASCRIPT',
-  'NODE',
-  'NEXT.JS',
-  'REACT NATIVE',
-  'REANIMATED',
-  'BLENDER',
-  'GIT',
-  'JAVA',
-  'DESIGN',
-  'FIGMA',
-  'FIREBASE',
-  'UI/UX',
-  'SQL',
-  'THREE.JS',
-  'THREE FIBER',
-];
 
 function lerp(prevV, newV, amt = 0.1) {
   //This function is used to calculate a number between two values
@@ -122,6 +102,7 @@ const StarsScreen = React.forwardRef((props, ref) => {
 const Screens = React.forwardRef((props, ref) => {
   const [screen, setScreen] = useState({ number: -1, transition: false });
   const { camera } = useThree();
+  ref.current = { ...ref.current, tools };
 
   useEffect(() => {
     //Resets the camera to default setting every time the screen changes
@@ -172,23 +153,32 @@ const Screens = React.forwardRef((props, ref) => {
     }
   };
 
+  const handleItemClick = (item) => {
+    if (item.position) {
+      ref.current.cameraSettings.lookingAt = item.position;
+    }
+  };
+
   return (
     <>
-      <Html fullscreen style={{ transform: 'translate(50%,50%)', position: 'absolute' }}>
+      <Html
+        fullscreen
+        style={{ transform: 'translate(50%,50%)', position: 'absolute', pointerEvents: 'none' }}
+      >
         <Header onClick={onHeaderClick} />
-        <StarsList data={data} />
-        {/* {screen.number == -1 ? (
+        {screen.number == 0 ? <StarsList ref={ref} handleItemClick={handleItemClick} /> : null}
+        {screen.number == -1 ? (
           <TextContainer>
             <Title>O UNIVERSO DO DESENVOLVIMENTO WEB</Title>
             <Subtitle>UMA JORNADA DE CONHECIMENTO E CRIATIVIDADE</Subtitle>
           </TextContainer>
-        ) : null} */}
+        ) : null}
       </Html>
-      {/* {screen.number == 0 ? <WordsSphere ref={ref} setReady={startTransition} /> : null}
+      {screen.number == 0 ? <WordsSphere ref={ref} setReady={startTransition} /> : null}
       <TransitionScreen ref={ref} />
       {screen.number == -1 ? (
         <StarsScreen ref={ref} setReady={startTransition} transition={screen.transition} />
-      ) : null} */}
+      ) : null}
     </>
   );
 });
@@ -200,6 +190,9 @@ export default function Home() {
     mouseTrack: {
       x: 0,
       y: 0,
+    },
+    cameraSettings: {
+      lookingAt: null,
     },
     //TransitionScreen reference, the value is used to increase(>0), decrease(<0) or do nothing (=0)
     transition: {

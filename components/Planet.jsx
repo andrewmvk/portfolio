@@ -22,38 +22,48 @@ export default React.forwardRef((props, ref) => {
     return (1 - amt) * prevV + amt * newV;
   }
 
-  useFrame(({ clock, viewport }) => {
+  useFrame(({ clock }) => {
     if (cameraRef.current) {
       const elapsedTime = clock.getElapsedTime() * 3;
       const theta = (elapsedTime * Math.PI) / 180;
       const x = radius * Math.cos(theta);
-      const y = radius * Math.sin(theta);
-      const z = 0;
+      const z = radius * Math.sin(theta);
+      const y = 0;
 
-      const { width, height } = viewport.getCurrentViewport(camera, [0, 0, 0]);
-
-      //smothing the mouse position change
+      //Smothing the mouse position change
       const valueX = lerp(mouseRef.current.x, ref.current.mouseTrack.x);
       const valueY = lerp(mouseRef.current.y, ref.current.mouseTrack.y);
 
       mouseRef.current = { x: valueX, y: valueY };
 
-      //calculate the mouse position relative to the current viewport width and height
-      const mouseX = (valueX / (width * 170)) * 2 - 1; //#why 170 factor? idk, it works
-      const mouseY = (valueY / (height * 170)) * 2 - 1;
+      //Calculate the mouse position relative to the current viewport width and height
+      const mouseX = (valueX / window.innerWidth) * 2 - 1;
+      const mouseY = (valueY / window.innerHeight) * 2 - 1;
 
-      //calculate the angle of the camera target relative to the mouse position
-      const angleX = theta - Math.PI / (3 + mouseX); //in radians
-      const angleY = phi - Math.PI / (3 - mouseY); //in radians #this value is correct?
+      //Calculate the angle of the camera target relative to the mouse position
+      const angleX = theta - Math.PI / (2 + mouseX / 2); //in radians
+      const angleY = phi - Math.PI / (2 - mouseY); //in radians #this value is correct?
 
-      //calculate the position of the target of the camera relative to the angles
-      const xT = radius * 1.5 * Math.cos(angleX);
-      const yT = radius * 1.5 * Math.sin(angleX);
-      const zT = Math.sin(angleY);
+      //Calculate the position of the target of the camera relative to the angles
+      //It's like a another circle that is 100 times larger than the circle than the camera is following
+      const xT = radius * 100 * Math.cos(angleX);
+      const zT = radius * 100 * Math.sin(angleX);
+      const yT = radius * 100 * Math.sin(angleY);
 
       //setting the camera position and target to simulate a planetary orbit
-      camera.position.set(x, z, y);
-      cameraRef.current.target = new THREE.Vector3(xT, zT, yT);
+      camera.position.set(x, y, z);
+      const lookingAtPosition = ref.current.cameraSettings.lookingAt;
+      console.log(cameraRef.current.target);
+      if (lookingAtPosition) {
+        const xL = lerp(cameraRef.current.target.x, lookingAtPosition.x, 0.01);
+        const yL = lerp(cameraRef.current.target.y, lookingAtPosition.y, 0.01);
+        const zL = lerp(cameraRef.current.target.z, lookingAtPosition.z, 0.01);
+        cameraRef.current.target = new THREE.Vector3(xL, yL, zL);
+        // camera.zoom = lerp(camera.zoom, 5);
+        // camera.fov = lerp(camera.fov, 50, 0.01);
+      } else {
+        cameraRef.current.target = new THREE.Vector3(xT, yT, zT);
+      }
     }
   });
 

@@ -5,28 +5,9 @@ import { Html, Point, PointMaterial, Points, Stars } from '@react-three/drei';
 import { StarCircle, StarTitle } from './styles';
 import Planet from '../Planet';
 import { random } from 'maath';
+import { colors, letters } from '../../styles/constants';
 
-const data = [
-  'REACT',
-  'CSS',
-  'HTML',
-  'JAVASCRIPT',
-  'NODE',
-  'NEXT.JS',
-  'REACT NATIVE',
-  'REANIMATED',
-  'BLENDER',
-  'GIT',
-  'JAVA',
-  'DESIGN',
-  'FIGMA',
-  'FIREBASE',
-  'UI/UX',
-  'SQL',
-];
-const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
-function Word({ children, revealedWord, position }) {
+const Word = ({ children, revealedWord, position }) => {
   const [wordData, setWordData] = useState({ word: children, revealed: false });
   const circleRef = useRef();
   const ref = useRef();
@@ -35,7 +16,7 @@ function Word({ children, revealedWord, position }) {
   const over = (e) => {
     e.stopPropagation();
     document.body.style.cursor = 'pointer';
-    if (ref.current) ref.current.style.color = '#fa2720';
+    if (ref.current) ref.current.style.color = colors.highlight;
     if (circleRef.current) circleRef.current.style.transform = 'scale(2)';
     if (!wordData.revealed) handleHover();
   };
@@ -54,7 +35,7 @@ function Word({ children, revealedWord, position }) {
         if (j < iterations) {
           newWord += revealedWord[j];
         } else {
-          newWord += LETTERS[Math.floor(Math.random() * 26)];
+          newWord += letters[Math.floor(Math.random() * letters.length)];
         }
       }
 
@@ -84,7 +65,7 @@ function Word({ children, revealedWord, position }) {
       </Html>
     </group>
   );
-}
+};
 
 const Cloud = React.forwardRef((props, ref) => {
   // const [sphere] = useState(() => random.inSphere(new Float32Array(5000), { radius: 10 }));
@@ -106,10 +87,10 @@ const Cloud = React.forwardRef((props, ref) => {
     const thetaSpan = Math.PI * 2;
     const phiSpan = Math.PI;
 
-    for (let i = 0; i < data.length; i++) {
+    for (let i = 0; i < ref.current.tools.length; i++) {
       let word = '';
-      for (let j = 0; j < data[i].length; j++) {
-        word += LETTERS[Math.floor(Math.random() * 26)];
+      for (let j = 0; j < ref.current.tools[i].name.length; j++) {
+        word += letters[Math.floor(Math.random() * letters.length)];
       }
 
       const phi = phiSpan * Math.random() * props.radius;
@@ -117,7 +98,10 @@ const Cloud = React.forwardRef((props, ref) => {
 
       const wordPos = new THREE.Vector3().setFromSpherical(spherical.set(props.radius, phi, theta));
 
-      temp.push([wordPos, word, data[i]]);
+      const originalWord = ref.current.tools[i].name;
+      //This is a array that contains the word position, the 'cryptographic format' of the word and the word itself
+      temp.push([wordPos, word, originalWord]);
+      ref.current.tools[i] = { name: originalWord, position: wordPos };
     }
     return temp;
   }, [props.radius]);

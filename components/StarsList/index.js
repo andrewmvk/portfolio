@@ -1,8 +1,7 @@
 import React, { useRef } from 'react';
 import { Container, Item } from './styles';
-import { useFrame } from '@react-three/fiber';
 
-export default ({ data }) => {
+export default React.forwardRef(({ handleItemClick }, ref) => {
   const containerRef = useRef(null);
   const itemsRef = useRef([]);
   const itemHeight = 40;
@@ -28,17 +27,18 @@ export default ({ data }) => {
 
   return (
     <Container ref={containerRef} onScroll={handleScroll} style={{ maxHeight: containerHeight }}>
-      {data.map((item, index) => {
+      {ref.current.tools.map((item, index) => {
         return (
           <Item
             ref={(r) => (itemsRef.current[index] = r)}
+            onClick={() => handleItemClick(item)}
             style={{ minHeight: itemHeight }}
             key={index}
           >
-            {item}
+            {item.name}
           </Item>
         );
       })}
     </Container>
   );
-};
+});
