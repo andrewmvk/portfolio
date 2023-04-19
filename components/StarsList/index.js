@@ -9,20 +9,20 @@ export default React.forwardRef(({ handleItemClick }, ref) => {
   const amount = containerHeight / itemHeight;
 
   const handleScroll = () => {
-    //A function used to track the scroll and the items that are currently visible relative to it
-    const scrollPercentage = containerRef.current.scrollTop / (containerHeight - itemHeight);
-    const ceilItemIndex = (amount - 1) * scrollPercentage; //Top item boundry
-    const floorItemIndex = ceilItemIndex + (amount - 1); //Bottom item boundry
-    itemsRef.current.forEach((item, index) => {
-      //For each item I seek those that are inside the boundries
-      if (index >= ceilItemIndex && index <= floorItemIndex) {
-        //Inside
-        item.style.opacity = 1;
-      } else {
-        //Outside
-        item.style.opacity = 0;
-      }
-    });
+    // //A function used to track the scroll and the items that are currently visible relative to it
+    // const scrollPercentage = containerRef.current.scrollTop / (containerHeight - itemHeight);
+    // const ceilItemIndex = (amount - 1) * scrollPercentage; //Top item boundry
+    // const floorItemIndex = ceilItemIndex + (amount - 1); //Bottom item boundry
+    // itemsRef.current.forEach((item, index) => {
+    //   //For each item I seek those that are inside the boundries
+    //   if (index >= ceilItemIndex && index <= floorItemIndex) {
+    //     //Inside
+    //     item.style.opacity = 1;
+    //   } else {
+    //     //Outside
+    //     item.style.opacity = 0;
+    //   }
+    // });
   };
 
   return (

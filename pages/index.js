@@ -9,6 +9,7 @@ import { Html, OrbitControls } from '@react-three/drei';
 import WordsSphere from '../components/WordsSphere';
 import StarsList from '../components/StarsList';
 import { tools } from '../styles/constants';
+import Modal from '../components/Modal';
 
 const space_grotesk = Space_Grotesk({ subsets: ['latin'] });
 
@@ -166,7 +167,12 @@ const Screens = React.forwardRef((props, ref) => {
         style={{ transform: 'translate(50%,50%)', position: 'absolute', pointerEvents: 'none' }}
       >
         <Header onClick={onHeaderClick} />
-        {screen.number == 0 ? <StarsList ref={ref} handleItemClick={handleItemClick} /> : null}
+        {screen.number == 0 ? (
+          <>
+            <Modal />
+            <StarsList ref={ref} handleItemClick={handleItemClick} />
+          </>
+        ) : null}
         {screen.number == -1 ? (
           <TextContainer>
             <Title>O UNIVERSO DO DESENVOLVIMENTO WEB</Title>
@@ -174,7 +180,9 @@ const Screens = React.forwardRef((props, ref) => {
           </TextContainer>
         ) : null}
       </Html>
-      {screen.number == 0 ? <WordsSphere ref={ref} setReady={startTransition} /> : null}
+      {screen.number == 0 ? (
+        <WordsSphere ref={ref} setReady={startTransition} handleItemClick={handleItemClick} />
+      ) : null}
       <TransitionScreen ref={ref} />
       {screen.number == -1 ? (
         <StarsScreen ref={ref} setReady={startTransition} transition={screen.transition} />
@@ -220,6 +228,7 @@ export default function Home() {
         resize={{ scroll: false }}
         camera={{ position: [0, 0, 0], fov: 75, far: 1000 }}
       >
+        <pointLight position={[10, 0, 10]} />
         <Screens ref={screensRefs} />
       </Canvas>
     </Container>

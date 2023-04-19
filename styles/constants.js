@@ -1,12 +1,26 @@
+import { Space_Grotesk } from 'next/font/google';
+
+const space_grotesk = Space_Grotesk({ subsets: ['latin'] });
+
 export const colors = {
-  text: '#ffffff',
+  text: '#fafafa',
   highlight: '#fad041',
   background: '#101010',
+  glassBg: 'rgba(0,0,0,0.15)',
+  glassBorder: 'rgba(255,255,255,0.18)',
 };
 
 export const fontSize = {
   headerTitle: 23,
   headerSubTitle: 15,
+  title: 23,
+  subTitle: 17,
+  text: 16,
+};
+
+export const others = {
+  blur: 3,
+  fontFamily: space_grotesk,
 };
 
 export const letters = [

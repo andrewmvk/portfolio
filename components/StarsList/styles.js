@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Space_Grotesk } from 'next/font/google';
-import { colors } from '../../styles/constants';
+import { colors, others } from '../../styles/constants';
 
 const space_grotesk = Space_Grotesk({ subsets: ['latin'] });
 
@@ -17,11 +17,14 @@ export const Container = styled.div`
   overflow-y: auto;
   transition: all 0.3s ease-in-out;
   padding: 15px 0px 15px 0px;
-  border-style: solid;
-  border-width: 1px 0px 1px 0px;
-  border-color: white;
+  background: ${colors.glassBg};
+  backdrop-filter: blur(${others.blur}px);
+  -webkit-backdrop-filter: blur(${others.blur}px);
+  border-radius: 10px;
+  border: 1px solid ${colors.glassBorder};
+
   &::-webkit-scrollbar {
-    width: 0;
+    width: 0px;
   }
 `;
 

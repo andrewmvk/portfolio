@@ -7,7 +7,7 @@ import Planet from '../Planet';
 import { random } from 'maath';
 import { colors, letters } from '../../styles/constants';
 
-const Word = ({ children, revealedWord, position }) => {
+const Word = ({ children, revealedWord, position, handleItemClick }) => {
   const [wordData, setWordData] = useState({ word: children, revealed: false });
   const circleRef = useRef();
   const ref = useRef();
@@ -56,7 +56,7 @@ const Word = ({ children, revealedWord, position }) => {
         <StarCircle ref={circleRef} sSize={sSize} />
         <StarTitle
           ref={ref}
-          onClick={() => console.log('clicked')}
+          onClick={() => handleItemClick({ name: wordData.word, position })}
           onPointerOver={over}
           onPointerOut={out}
         >
@@ -68,18 +68,7 @@ const Word = ({ children, revealedWord, position }) => {
 };
 
 const Cloud = React.forwardRef((props, ref) => {
-  // const [sphere] = useState(() => random.inSphere(new Float32Array(5000), { radius: 10 }));
   const cloudsRef = useRef();
-
-  useFrame(({ clock }) => {
-    // if (ref.current?.isDragging && cloudsRef.current) {
-    //   cloudsRef.current.rotation.x += ref.current.y * 0.002;
-    //   cloudsRef.current.rotation.y += ref.current.x * 0.002;
-    // }
-    // const elapsedTime = clock.getElapsedTime(); // Get the elapsed time since the component mounted
-    // cloudsRef.current.rotation.y = (-29 * Math.PI) / 180; // Rotate the sphere around the y-axis
-    // cloudsRef.current.rotation.z = elapsedTime / 6;
-  });
 
   const words = useMemo(() => {
     const temp = [];
@@ -101,6 +90,7 @@ const Cloud = React.forwardRef((props, ref) => {
       const originalWord = ref.current.tools[i].name;
       //This is a array that contains the word position, the 'cryptographic format' of the word and the word itself
       temp.push([wordPos, word, originalWord]);
+      //Update the reference so the StarsList and other components can use that
       ref.current.tools[i] = { name: originalWord, position: wordPos };
     }
     return temp;
@@ -108,19 +98,16 @@ const Cloud = React.forwardRef((props, ref) => {
 
   return (
     <group ref={cloudsRef}>
-      {/* <Points positions={sphere} stride={3} frustumCulled={false}>
-        <PointMaterial
-          transparent
-          color="#ffffff"
-          size={0.005}
-          sizeAttenuation={true}
-          depthWrite={false}
-        />
-      </Points> */}
       <Points>
         <PointMaterial transparent vertexColors sizeAttenuation depthWrite={false} />
         {words.map(([pos, word, revealedWord], index) => (
-          <Word key={index} revealedWord={revealedWord} position={pos} children={word} />
+          <Word
+            key={index}
+            handleItemClick={props.handleItemClick}
+            revealedWord={revealedWord}
+            position={pos}
+            children={word}
+          />
         ))}
       </Points>
       <Stars fade speed={0.5} />
@@ -140,7 +127,7 @@ export default React.forwardRef((props, ref) => {
       <Suspense fallback={null}>
         <Planet position={[0, -2.5, 0]} ref={ref} />
       </Suspense>
-      <Cloud radius={200} ref={ref} />
+      <Cloud handleItemClick={props.handleItemClick} radius={200} ref={ref} />
     </>
   );
 });
