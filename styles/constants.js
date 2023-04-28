@@ -16,6 +16,7 @@ export const fontSize = {
   title: 23,
   subTitle: 17,
   text: 16,
+  button: 19,
 };
 
 export const others = {
@@ -50,23 +51,131 @@ export const letters = [
   '\u03A9',
 ];
 
-export const tools = [
-  { name: 'REACT.JS' },
-  { name: 'CSS' },
-  { name: 'HTML' },
-  { name: 'JAVASCRIPT' },
-  { name: 'NODE' },
-  { name: 'NEXTJS' },
-  { name: 'REACTNATIVE' },
-  { name: 'REANIMATED' },
-  { name: 'BLENDER' },
-  { name: 'GIT' },
-  { name: 'JAVA' },
-  { name: 'DESIGN' },
-  { name: 'FIGMA' },
-  { name: 'FIREBASE' },
-  { name: 'UI/UX' },
-  { name: 'SQL' },
-  { name: 'THREEJS' },
-  { name: 'THREEFIBER' },
+export const toolsData = [
+  {
+    name: 'REACT.JS',
+    developTime: '5 - 6 meses',
+    knowledgeLevel: 'INTERMEDIÁRIO',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ut nulla eget nisl ornare feugiat ac eget sem. Nam sed aliquam magna. Quisque quis posuere leo, quis accumsan augue. Donec pretium rhoncus est, sit amet aliquam nunc. Duis sodales aliquet dictum.',
+  },
+  {
+    name: 'CSS',
+    developTime: '5 - 6 meses',
+    knowledgeLevel: 'INTERMEDIÁRIO',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ut nulla eget nisl ornare feugiat ac eget sem. Nam sed aliquam magna. Quisque quis posuere leo, quis accumsan augue. Donec pretium rhoncus est, sit amet aliquam nunc. Duis sodales aliquet dictum.',
+  },
+  {
+    name: 'HTML',
+    developTime: '5 - 6 meses',
+    knowledgeLevel: 'INTERMEDIÁRIO',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ut nulla eget nisl ornare feugiat ac eget sem. Nam sed aliquam magna. Quisque quis posuere leo, quis accumsan augue. Donec pretium rhoncus est, sit amet aliquam nunc. Duis sodales aliquet dictum.',
+  },
+  {
+    name: 'JAVASCRIPT',
+    developTime: '1 - 1.5 anos',
+    knowledgeLevel: 'AVANÇADO',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ut nulla eget nisl ornare feugiat ac eget sem. Nam sed aliquam magna. Quisque quis posuere leo, quis accumsan augue. Donec pretium rhoncus est, sit amet aliquam nunc. Duis sodales aliquet dictum.',
+  },
+  {
+    name: 'NODE',
+    developTime: '3 - 4 meses',
+    knowledgeLevel: 'BÁSICO',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ut nulla eget nisl ornare feugiat ac eget sem. Nam sed aliquam magna. Quisque quis posuere leo, quis accumsan augue. Donec pretium rhoncus est, sit amet aliquam nunc. Duis sodales aliquet dictum.',
+  },
+  {
+    name: 'NEXTJS',
+    developTime: '4 - 5 meses',
+    knowledgeLevel: 'MÉDIO',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ut nulla eget nisl ornare feugiat ac eget sem. Nam sed aliquam magna. Quisque quis posuere leo, quis accumsan augue. Donec pretium rhoncus est, sit amet aliquam nunc. Duis sodales aliquet dictum.',
+  },
+  {
+    name: 'REACTNATIVE',
+    developTime: '1 - 1.3 anos',
+    knowledgeLevel: 'AVANÇADO',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ut nulla eget nisl ornare feugiat ac eget sem. Nam sed aliquam magna. Quisque quis posuere leo, quis accumsan augue. Donec pretium rhoncus est, sit amet aliquam nunc. Duis sodales aliquet dictum.',
+  },
+  {
+    name: 'REANIMATED',
+    developTime: '3 - 4 meses',
+    knowledgeLevel: 'INTERMEDIÁRIO',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ut nulla eget nisl ornare feugiat ac eget sem. Nam sed aliquam magna. Quisque quis posuere leo, quis accumsan augue. Donec pretium rhoncus est, sit amet aliquam nunc. Duis sodales aliquet dictum.',
+  },
+  {
+    name: 'BLENDER',
+    developTime: '1 - 2 meses',
+    knowledgeLevel: 'BÁSICO',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ut nulla eget nisl ornare feugiat ac eget sem. Nam sed aliquam magna. Quisque quis posuere leo, quis accumsan augue. Donec pretium rhoncus est, sit amet aliquam nunc. Duis sodales aliquet dictum.',
+  },
+  {
+    name: 'GIT',
+    developTime: '1.2 - 1.7 anos',
+    knowledgeLevel: 'MÉDIO',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ut nulla eget nisl ornare feugiat ac eget sem. Nam sed aliquam magna. Quisque quis posuere leo, quis accumsan augue. Donec pretium rhoncus est, sit amet aliquam nunc. Duis sodales aliquet dictum.',
+  },
+  {
+    name: 'JAVA',
+    developTime: '2 - 3 meses',
+    knowledgeLevel: 'BÁSICO',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ut nulla eget nisl ornare feugiat ac eget sem. Nam sed aliquam magna. Quisque quis posuere leo, quis accumsan augue. Donec pretium rhoncus est, sit amet aliquam nunc. Duis sodales aliquet dictum.',
+  },
+  {
+    name: 'DESIGN',
+    developTime: '6 - 7 meses',
+    knowledgeLevel: 'INTERMEDIÁRIO',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ut nulla eget nisl ornare feugiat ac eget sem. Nam sed aliquam magna. Quisque quis posuere leo, quis accumsan augue. Donec pretium rhoncus est, sit amet aliquam nunc. Duis sodales aliquet dictum.',
+  },
+  {
+    name: 'FIGMA',
+    developTime: '4 - 5 meses',
+    knowledgeLevel: 'MÉDIO',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ut nulla eget nisl ornare feugiat ac eget sem. Nam sed aliquam magna. Quisque quis posuere leo, quis accumsan augue. Donec pretium rhoncus est, sit amet aliquam nunc. Duis sodales aliquet dictum.',
+  },
+  {
+    name: 'FIREBASE',
+    developTime: '1 - 1.3 anos',
+    knowledgeLevel: 'INTERMEDIÁRIO',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ut nulla eget nisl ornare feugiat ac eget sem. Nam sed aliquam magna. Quisque quis posuere leo, quis accumsan augue. Donec pretium rhoncus est, sit amet aliquam nunc. Duis sodales aliquet dictum.',
+  },
+  {
+    name: 'UI/UX',
+    developTime: '9 - 10 meses',
+    knowledgeLevel: 'INTERMEDIÁRIO',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ut nulla eget nisl ornare feugiat ac eget sem. Nam sed aliquam magna. Quisque quis posuere leo, quis accumsan augue. Donec pretium rhoncus est, sit amet aliquam nunc. Duis sodales aliquet dictum.',
+  },
+  {
+    name: 'SQL',
+    developTime: '5 - 6 meses',
+    knowledgeLevel: 'MÉDIO',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ut nulla eget nisl ornare feugiat ac eget sem. Nam sed aliquam magna. Quisque quis posuere leo, quis accumsan augue. Donec pretium rhoncus est, sit amet aliquam nunc. Duis sodales aliquet dictum.',
+  },
+  {
+    name: 'THREEJS',
+    developTime: '3 - 4 meses',
+    knowledgeLevel: 'MÉDIO',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ut nulla eget nisl ornare feugiat ac eget sem. Nam sed aliquam magna. Quisque quis posuere leo, quis accumsan augue. Donec pretium rhoncus est, sit amet aliquam nunc. Duis sodales aliquet dictum.',
+  },
+  {
+    name: 'THREEFIBER',
+    developTime: '3 - 4 meses',
+    knowledgeLevel: 'INTERMEDIÁRIO',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ut nulla eget nisl ornare feugiat ac eget sem. Nam sed aliquam magna. Quisque quis posuere leo, quis accumsan augue. Donec pretium rhoncus est, sit amet aliquam nunc. Duis sodales aliquet dictum.',
+  },
 ];

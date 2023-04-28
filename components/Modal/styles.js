@@ -25,14 +25,14 @@ export const Container = styled.div`
   }
 `;
 
-export const Title = styled.div`
+export const Title = styled.span`
   letter-spacing: 2px;
   font-size: ${fontSize.title}px;
   font-weight: bold;
   color: ${colors.text};
 `;
 
-export const Subtitle = styled.div`
+export const Subtitle = styled.span`
   letter-spacing: 2px;
   line-height: ${fontSize.subTitle}px;
   font-size: ${fontSize.subTitle}px;
@@ -46,18 +46,28 @@ export const Line = styled.div`
   background-color: ${colors.highlight};
 `;
 
-export const Text = styled.div`
+export const TextContainer = styled.div`
+  display: flex;
+  flex: 4.5;
+  padding: 1.5% 3% 1.5% 3%;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 0px;
+  }
+`;
+
+export const Text = styled.p`
+  margin: 0;
   font-size: ${fontSize.text}px;
   text-align: justify;
   color: ${colors.text};
   font-weight: medium;
-  width: 100%;
-  max-height: 100%;
 `;
 
-export const LevelCountContainer = styled.p`
+export const LevelCountContainer = styled.div`
   display: flex;
-  height: 100%;
+  min-height: 100%;
   width: 20%;
   justify-content: center;
 `;
@@ -66,23 +76,13 @@ export const LevelCountPart = styled.div`
   width: 20px;
   height: 20px;
   border-radius: 20px;
-  border: 1px solid white;
-`;
-
-export const TextContainer = styled.div`
-  flex: 5;
-  padding: 4%;
-  overflow-y: auto;
-
-  &::-webkit-scrollbar {
-    width: 0px;
-  }
+  border: 1px solid rgba(255, 255, 255, 0.5);
 `;
 
 export const ButtonContainer = styled.div`
   display: flex;
-  flex: 2;
+  flex: 1.5;
   width: 100%;
+  min-height: max-content;
   justify-content: end;
-  padding-top: 30px;
 `;

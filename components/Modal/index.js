@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ButtonContainer,
   Container,
@@ -12,14 +12,40 @@ import {
 } from './styles';
 import Button from '../Button';
 
-export default () => {
-  return (
+export default React.forwardRef((props, ref) => {
+  const [modalSettings, setModalSettings] = useState({
+    isVisible: false,
+    name: '',
+    developTime: '',
+    knowledgeLevel: '',
+    description: '',
+  });
+
+  const handleSetModal = () => {
+    const selected = ref.current.tools.selected;
+    if (!isNaN(selected)) {
+      setModalSettings({ isVisible: true, ...ref.current.tools.data[selected] });
+    }
+  };
+
+  const handleExitPress = () => {
+    ref.current.tools.selected = null;
+    //Resets the camera so that it goes back to its original "looking position"
+    ref.current.cameraSettings.lookingAt = null;
+    setModalSettings({ ...modalSettings, isVisible: false });
+  };
+
+  useEffect(() => {
+    ref.current.others.setModal = handleSetModal;
+  }, []);
+
+  return modalSettings.isVisible ? (
     <Container>
-      <div style={{ flex: 2, width: '100%', display: 'flex' }}>
-        <div style={{ height: '100%', width: '80%' }}>
-          <Title>LOREM IPSUM</Title>
-          <Subtitle>Tempo: 3-4 meses</Subtitle>
-          <Subtitle>Nível: baixo</Subtitle>
+      <div style={{ display: 'flex', width: '100%', flex: 1.5 }}>
+        <div style={{ width: '80%', display: 'flex', flexDirection: 'column' }}>
+          <Title>{modalSettings.name}</Title>
+          <Subtitle>Tempo: {modalSettings.developTime}</Subtitle>
+          <Subtitle>Nível: {modalSettings.knowledgeLevel}</Subtitle>
         </div>
         <LevelCountContainer>
           <LevelCountPart style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }} />
@@ -27,21 +53,17 @@ export default () => {
           <LevelCountPart style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }} />
         </LevelCountContainer>
       </div>
-      <div style={{ flex: 1 }}>
+      <div style={{ display: 'flex', flex: 1 }}>
         <Line style={{ marginTop: 15 }} />
       </div>
       <TextContainer>
-        <Text>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque vel tristique arcu.
-          Proin accumsan mauris sed velit maximus condimentum. Morbi dapibus metus a tellus
-          vehicula, pretium finibus sapien vulputate. Maecenas condimentum pretium pellentesque.
-          Suspendisse potenti. Vestibulum tempor ante auctor ex varius, mattis sagittis ex congue.
-          Pellentesque iaculis vestibulum enim et aliquam. Sed rutrum accumsan ultricies.
-        </Text>
+        <div style={{ height: '100%' }}>
+          <Text>{modalSettings.description}</Text>
+        </div>
       </TextContainer>
       <ButtonContainer>
-        <Button />
+        <Button text={'ENTENDIDO'} onPress={handleExitPress} />
       </ButtonContainer>
     </Container>
-  );
-};
+  ) : null;
+});

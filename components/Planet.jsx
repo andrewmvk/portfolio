@@ -12,7 +12,6 @@ export default React.forwardRef((props, ref) => {
   const { nodes, materials } = useGLTF('/planet-core.gltf');
   const planetRef = useRef();
   const cameraRef = useRef();
-  const mouseRef = useRef({ x: 0, y: 0 });
   const radius = 2.5;
   const phi = (90 * Math.PI) / 180;
 
@@ -31,10 +30,8 @@ export default React.forwardRef((props, ref) => {
       const y = 0;
 
       //Smothing the mouse position change
-      const valueX = lerp(mouseRef.current.x, ref.current.mouseTrack.x);
-      const valueY = lerp(mouseRef.current.y, ref.current.mouseTrack.y);
-
-      mouseRef.current = { x: valueX, y: valueY };
+      const valueX = ref.current.mouseTrack.x;
+      const valueY = ref.current.mouseTrack.y;
 
       //Calculate the mouse position relative to the current viewport width and height
       const mouseX = (valueX / window.innerWidth) * 2 - 1;
@@ -53,7 +50,7 @@ export default React.forwardRef((props, ref) => {
       //setting the camera position and target to simulate a planetary orbit
       camera.position.set(x, y, z);
       const lookingAtPosition = ref.current.cameraSettings.lookingAt;
-      console.log(cameraRef.current.target);
+
       if (lookingAtPosition) {
         const xL = lerp(cameraRef.current.target.x, lookingAtPosition.x, 0.01);
         const yL = lerp(cameraRef.current.target.y, lookingAtPosition.y, 0.01);
@@ -62,7 +59,10 @@ export default React.forwardRef((props, ref) => {
         // camera.zoom = lerp(camera.zoom, 5);
         // camera.fov = lerp(camera.fov, 50, 0.01);
       } else {
-        cameraRef.current.target = new THREE.Vector3(xT, yT, zT);
+        const xL = lerp(cameraRef.current.target.x, xT, 0.01);
+        const yL = lerp(cameraRef.current.target.y, yT, 0.01);
+        const zL = lerp(cameraRef.current.target.z, zT, 0.01);
+        cameraRef.current.target = new THREE.Vector3(xL, yL, zL);
       }
     }
   });

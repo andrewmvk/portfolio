@@ -1,13 +1,11 @@
 import * as THREE from 'three';
 import React, { useRef, useState, useMemo, useCallback, Suspense, useEffect } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Html, Point, PointMaterial, Points, Stars } from '@react-three/drei';
 import { StarCircle, StarTitle } from './styles';
 import Planet from '../Planet';
-import { random } from 'maath';
 import { colors, letters } from '../../styles/constants';
 
-const Word = ({ children, revealedWord, position, handleItemClick }) => {
+const Word = ({ children, revealedWord, position, handleItemClick, index }) => {
   const [wordData, setWordData] = useState({ word: children, revealed: false });
   const circleRef = useRef();
   const ref = useRef();
@@ -20,6 +18,7 @@ const Word = ({ children, revealedWord, position, handleItemClick }) => {
     if (circleRef.current) circleRef.current.style.transform = 'scale(2)';
     if (!wordData.revealed) handleHover();
   };
+
   const out = () => {
     document.body.style.cursor = 'default';
     if (ref.current) ref.current.style.color = 'white';
@@ -28,7 +27,6 @@ const Word = ({ children, revealedWord, position, handleItemClick }) => {
 
   const handleHover = useCallback(() => {
     let iterations = 0;
-
     const interval = setInterval(() => {
       let newWord = '';
       for (let j = 0; j < revealedWord.length; j++) {
@@ -39,12 +37,11 @@ const Word = ({ children, revealedWord, position, handleItemClick }) => {
         }
       }
 
+      setWordData({ word: newWord, revealed: true });
       if (iterations >= revealedWord.length) {
-        setWordData({ word: newWord, revealed: true });
         clearInterval(interval);
-      } else {
-        setWordData({ ...wordData, word: newWord });
       }
+
       iterations++;
     }, 50);
   }, []);
@@ -56,7 +53,7 @@ const Word = ({ children, revealedWord, position, handleItemClick }) => {
         <StarCircle ref={circleRef} sSize={sSize} />
         <StarTitle
           ref={ref}
-          onClick={() => handleItemClick({ name: wordData.word, position })}
+          onClick={() => handleItemClick({ name: wordData.word, position }, index)}
           onPointerOver={over}
           onPointerOut={out}
         >
@@ -76,9 +73,10 @@ const Cloud = React.forwardRef((props, ref) => {
     const thetaSpan = Math.PI * 2;
     const phiSpan = Math.PI;
 
-    for (let i = 0; i < ref.current.tools.length; i++) {
+    for (let i = 0; i < ref.current.tools.data.length; i++) {
       let word = '';
-      for (let j = 0; j < ref.current.tools[i].name.length; j++) {
+      //I know, it's a large name...
+      for (let j = 0; j < ref.current.tools.data[i].name.length; j++) {
         word += letters[Math.floor(Math.random() * letters.length)];
       }
 
@@ -87,11 +85,15 @@ const Cloud = React.forwardRef((props, ref) => {
 
       const wordPos = new THREE.Vector3().setFromSpherical(spherical.set(props.radius, phi, theta));
 
-      const originalWord = ref.current.tools[i].name;
+      const originalWord = ref.current.tools.data[i].name;
       //This is a array that contains the word position, the 'cryptographic format' of the word and the word itself
       temp.push([wordPos, word, originalWord]);
       //Update the reference so the StarsList and other components can use that
-      ref.current.tools[i] = { name: originalWord, position: wordPos };
+      ref.current.tools.data[i] = {
+        ...ref.current.tools.data[i],
+        name: originalWord,
+        position: wordPos,
+      };
     }
     return temp;
   }, [props.radius]);
@@ -103,6 +105,7 @@ const Cloud = React.forwardRef((props, ref) => {
         {words.map(([pos, word, revealedWord], index) => (
           <Word
             key={index}
+            index={index}
             handleItemClick={props.handleItemClick}
             revealedWord={revealedWord}
             position={pos}

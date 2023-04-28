@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import { colors, others } from '../styles/constants';
+import { colors, fontSize, others } from '../styles/constants';
 
-export default () => {
+export default ({ text, onPress }) => {
   return (
-    <Container>
+    <Container onClick={onPress}>
       <Inner>
-        <Text>LOREM IPSUM</Text>
+        <Text>{text}</Text>
       </Inner>
     </Container>
   );
@@ -22,7 +22,21 @@ const Container = styled.div`
   border-radius: 50px;
   justify-content: center;
   align-items: center;
+  box-shadow: 0px 0px 4px 3px rgba(0, 0, 0, 0.25);
   cursor: pointer;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    box-shadow: 0px 0px 15px 4px rgba(250, 208, 65, 0.2);
+
+    div {
+      border: 1px dashed ${colors.highlight};
+    }
+
+    span {
+      text-shadow: 0px 0px 4px rgba(250, 208, 65, 0.75);
+    }
+  }
 `;
 
 const Inner = styled.div`
@@ -33,12 +47,20 @@ const Inner = styled.div`
   max-width: 200px;
   border: 1px dashed white;
   border-radius: 50px;
+  transition: all 0.3s ease-in-out;
 `;
 
-const Text = styled.div`
+const Text = styled.span`
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
   font-family: ${others.fontFamily};
   font-weight: lighter;
-  font-size: 19px;
+  font-size: ${fontSize.button}px;
   padding: 5px 20px 5px 20px;
   color: ${colors.text};
+  transition: all 0.3s ease-in-out;
+  text-shadow: 0px 0px 4px black;
+  z-index: 2;
 `;

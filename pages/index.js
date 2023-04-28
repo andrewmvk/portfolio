@@ -8,7 +8,7 @@ import Header from '../components/Header';
 import { Html, OrbitControls } from '@react-three/drei';
 import WordsSphere from '../components/WordsSphere';
 import StarsList from '../components/StarsList';
-import { tools } from '../styles/constants';
+import { toolsData } from '../styles/constants';
 import Modal from '../components/Modal';
 
 const space_grotesk = Space_Grotesk({ subsets: ['latin'] });
@@ -100,10 +100,53 @@ const StarsScreen = React.forwardRef((props, ref) => {
   );
 });
 
+const ScreensHtml = React.forwardRef(({ changeScreen, screen, handleItemClick }, ref) => {
+  const onHeaderClick = (index) => {
+    //This function will do nothing if the user is already on the page
+    if (screen.number == -1 && screen.number != index) {
+      const maxVelocity = ref.current.stars.maxVelocity;
+      let newVelocity = ref.current.stars.currentVelocity;
+      //A interval setted to make a acceleration effect to the stars movement
+      const interval = setInterval(() => {
+        newVelocity += ref.current.stars.acceleration;
+        ref.current.stars.currentVelocity = newVelocity;
+        if (newVelocity >= maxVelocity) {
+          //When reach the max speed, it will start the transition and change the screen
+          changeScreen(index);
+          clearInterval(interval);
+        }
+      }, 10);
+    } else if (screen.number != index) {
+      ref.current.stars.currentVelocity = ref.current.stars.initialVelocity;
+      changeScreen(-1);
+    }
+  };
+
+  return (
+    <Html
+      fullscreen
+      style={{ transform: 'translate(50%,50%)', position: 'absolute', pointerEvents: 'none' }}
+    >
+      <Header onClick={onHeaderClick} />
+      {screen.number == 0 ? (
+        <>
+          <Modal ref={ref} />
+          <StarsList ref={ref} handleItemClick={handleItemClick} />
+        </>
+      ) : null}
+      {screen.number == -1 ? (
+        <TextContainer>
+          <Title>O UNIVERSO DO DESENVOLVIMENTO WEB</Title>
+          <Subtitle>UMA JORNADA DE CONHECIMENTO E CRIATIVIDADE</Subtitle>
+        </TextContainer>
+      ) : null}
+    </Html>
+  );
+});
+
 const Screens = React.forwardRef((props, ref) => {
   const [screen, setScreen] = useState({ number: -1, transition: false });
   const { camera } = useThree();
-  ref.current = { ...ref.current, tools };
 
   useEffect(() => {
     //Resets the camera to default setting every time the screen changes
@@ -133,53 +176,22 @@ const Screens = React.forwardRef((props, ref) => {
     }, 1000);
   };
 
-  const onHeaderClick = (index) => {
-    //This function will do nothing if the user is already on the page
-    if (screen.number == -1 && screen.number != index) {
-      const maxVelocity = ref.current.stars.maxVelocity;
-      let newVelocity = ref.current.stars.currentVelocity;
-      //A interval setted to make a acceleration effect to the stars movement
-      const interval = setInterval(() => {
-        newVelocity += ref.current.stars.acceleration;
-        ref.current.stars.currentVelocity = newVelocity;
-        if (newVelocity >= maxVelocity) {
-          //When reach the max speed, it will start the transition and change the screen
-          changeScreen(index);
-          clearInterval(interval);
-        }
-      }, 10);
-    } else if (screen.number != index) {
-      ref.current.stars.currentVelocity = ref.current.stars.initialVelocity;
-      changeScreen(-1);
-    }
-  };
-
-  const handleItemClick = (item) => {
-    if (item.position) {
+  const handleItemClick = (item, index) => {
+    if (item.position && ref.current.others.setModal != null) {
+      ref.current.tools.selected = index;
       ref.current.cameraSettings.lookingAt = item.position;
+      ref.current.others.setModal();
     }
   };
 
   return (
     <>
-      <Html
-        fullscreen
-        style={{ transform: 'translate(50%,50%)', position: 'absolute', pointerEvents: 'none' }}
-      >
-        <Header onClick={onHeaderClick} />
-        {screen.number == 0 ? (
-          <>
-            <Modal />
-            <StarsList ref={ref} handleItemClick={handleItemClick} />
-          </>
-        ) : null}
-        {screen.number == -1 ? (
-          <TextContainer>
-            <Title>O UNIVERSO DO DESENVOLVIMENTO WEB</Title>
-            <Subtitle>UMA JORNADA DE CONHECIMENTO E CRIATIVIDADE</Subtitle>
-          </TextContainer>
-        ) : null}
-      </Html>
+      <ScreensHtml
+        ref={ref}
+        changeScreen={changeScreen}
+        screen={screen}
+        handleItemClick={handleItemClick}
+      />
       {screen.number == 0 ? (
         <WordsSphere ref={ref} setReady={startTransition} handleItemClick={handleItemClick} />
       ) : null}
@@ -213,6 +225,14 @@ export default function Home() {
       currentVelocity: 1,
       maxVelocity: 30,
       acceleration: 0.1,
+    },
+    tools: {
+      //The selected value is the current selected star, it can goes from 0 to the toolsData length (index)
+      selected: null,
+      data: toolsData,
+    },
+    others: {
+      setModal: null,
     },
   });
 

@@ -27,11 +27,11 @@ export default React.forwardRef(({ handleItemClick }, ref) => {
 
   return (
     <Container ref={containerRef} onScroll={handleScroll} style={{ maxHeight: containerHeight }}>
-      {ref.current.tools.map((item, index) => {
+      {ref.current.tools.data.map((item, index) => {
         return (
           <Item
             ref={(r) => (itemsRef.current[index] = r)}
-            onClick={() => handleItemClick(item)}
+            onClick={() => handleItemClick(item, index)}
             style={{ minHeight: itemHeight }}
             key={index}
           >
