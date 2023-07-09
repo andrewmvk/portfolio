@@ -9,7 +9,7 @@ const boxSize = 2000; //Stars spread radius
 const rotation = 0.001; //Stars rotation over time
 const maxTailLength = 50; //The maximum length of the star's tail
 
-const Generate = () => {
+const generateStars = () => {
   const starsVertices = [];
   const segmentVertices = [];
   for (let i = 0; i < amount; i++) {
@@ -22,7 +22,7 @@ const Generate = () => {
   return { starsVertices, segmentVertices };
 };
 
-const { starsVertices, segmentVertices } = Generate();
+const { starsVertices, segmentVertices } = generateStars();
 const starsGeometry = new THREE.BufferGeometry();
 starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starsVertices, 3));
 
@@ -81,12 +81,9 @@ export default React.forwardRef(function StarsBackground(props, ref) {
         <points>
           <bufferGeometry attach="geometry" {...starsGeometry} />
           <PointMaterial
-            transparent
-            opacity={1}
             color="#ffffff"
             size={starSize}
             sizeAttenuation={true}
-            depthWrite={false}
           />
         </points>
         <Segments lineWidth={0} limit={amount + 1}>
@@ -112,7 +109,6 @@ export default React.forwardRef(function StarsBackground(props, ref) {
             color="#ffffff"
             size={starSize}
             sizeAttenuation={true}
-            depthWrite={false}
           />
         </points>
         <Segments lineWidth={0} limit={amount + 1}>
