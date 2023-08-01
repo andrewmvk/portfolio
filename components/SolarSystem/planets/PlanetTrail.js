@@ -5,7 +5,9 @@ const PlanetTrail = ({ position }) => {
 
    return (
       <mesh rotation={[Math.PI / 2 - tiltAngle, 0, 0]}>
-         <torusGeometry args={[position[2], 0.05, 48]} />
+         <torusGeometry
+            args={[position[2], 0.1, 4, Math.abs(position[2]) * 1.5]}
+         />
          <meshBasicMaterial color="#f0f0f0" side={THREE.DoubleSide} />
       </mesh>
    );

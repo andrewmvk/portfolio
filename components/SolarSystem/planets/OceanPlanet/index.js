@@ -5,7 +5,7 @@ import vertexShader from "./vertexShader";
 import * as THREE from "three";
 import PlanetTrail from "../PlanetTrail";
 
-const OceanPlanet = ({ position = [0, 0, 40] }) => {
+const OceanPlanet = ({ position = [0, 0, 40], onClick }) => {
    const uniforms = useMemo(
       () => ({
          uIntensity: {
@@ -39,6 +39,7 @@ const OceanPlanet = ({ position = [0, 0, 40] }) => {
             fragmentShader={fragmentShader}
             vertexShader={vertexShader}
             ringEnabled
+            onClick={onClick}
          />
       </>
    );

@@ -1,4 +1,4 @@
-const vertexShader = /*glsl*/`
+const vertexShader = /*glsl*/ `
 	#ifdef GL_ES
 	precision mediump float;
 	#endif
@@ -34,7 +34,7 @@ const vertexShader = /*glsl*/`
 		float frequency = 1.0;
 
 		for(int i=0; i < uOctaves; i++) {
-			vDisplacement += noise(position * frequency + 0.7 * uTime);
+			vDisplacement += noise(position * frequency + 2.0 * uTime);
 			frequency *= 1.2;
 		}
 
@@ -46,6 +46,6 @@ const vertexShader = /*glsl*/`
 
 		gl_Position = projectedPosition;
 	}
-`
+`;
 
 export default vertexShader;

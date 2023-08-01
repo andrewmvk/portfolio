@@ -5,7 +5,7 @@ import vertexShader from "./vertexShader";
 import * as THREE from "three";
 import PlanetTrail from "../PlanetTrail";
 
-const DesertPlanet = ({ position = [0, 0, -30] }) => {
+const DesertPlanet = ({ position = [0, 0, -30], onClick }) => {
    const uniforms = useMemo(
       () => ({
          uIntensity: {
@@ -34,10 +34,11 @@ const DesertPlanet = ({ position = [0, 0, -30] }) => {
             uniforms={uniforms}
             position={position}
             orbitalSpeed={0.05}
-            radius={2}
+            radius={2.5}
             atmosphere={{ enabled: true, scale: 1.15 }}
             fragmentShader={fragmentShader}
             vertexShader={vertexShader}
+            onClick={onClick}
          />
       </>
    );

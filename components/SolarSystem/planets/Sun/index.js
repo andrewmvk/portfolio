@@ -4,7 +4,7 @@ import fragmentShader from "./fragmentShader";
 import vertexShader from "./vertexShader";
 import * as THREE from "three";
 
-const Sun = () => {
+const Sun = React.forwardRef(({ onClick }, ref) => {
    const uniforms = useMemo(
       () => ({
          uIntensity: {
@@ -28,14 +28,17 @@ const Sun = () => {
 
    return (
       <CustomSphere
+         ref={ref}
          uniforms={uniforms}
          orbitalSpeed={0.01}
          radius={10}
-         atmosphere={{ enabled: true, scale: 1.5 }}
+         atmosphere={{ enabled: false, scale: 1.5 }}
          fragmentShader={fragmentShader}
          vertexShader={vertexShader}
+         receiveShadow={false}
+         onClick={onClick}
       />
    );
-};
+});
 
 export default Sun;

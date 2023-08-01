@@ -1,66 +1,83 @@
-import React from 'react';
-import styled from 'styled-components';
-import { colors, fontSize, others } from '../styles/constants';
+import styled from "styled-components";
+import { colors } from "../styles/constants";
+import React, { useState } from "react";
+import { CgClose } from "react-icons/cg";
 
-export default ({ text, onPress }) => {
-  return (
-    <Container onClick={onPress}>
-      <Inner>
-        <Text>{text}</Text>
-      </Inner>
-    </Container>
-  );
-};
+export default React.forwardRef(({ onClick, text = "TEXT" }, ref) => {
+   const [clicked, setClicked] = useState(false);
 
-const Container = styled.div`
-  pointer-events: auto;
-  display: flex;
-  padding: 5px;
-  border: 1px solid white;
-  height: 50px;
-  width: max-content;
-  border-radius: 50px;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0px 0px 4px 3px rgba(0, 0, 0, 0.25);
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
+   const handleClick = () => {
+      if (ref && !clicked) {
+         if (!ref.current.cameraSettings.showingGUI) {
+            // Setted in the PlanetsScreen...
+            ref.current.others.setIllusion();
+            setClicked(true);
+         }
+      } else if (ref && clicked) {
+         ref.current.others.onIllusionClose();
+         setClicked(false);
+      } else {
+         onClick();
+      }
+   };
 
-  &:hover {
-    box-shadow: 0px 0px 15px 4px rgba(250, 208, 65, 0.2);
+   return (
+      <ButtonContainer onClick={handleClick}>
+         <div>
+            {clicked ? <CgClose size={28} className="icon" /> : <p>{text}</p>}
+         </div>
+      </ButtonContainer>
+   );
+});
 
-    div {
-      border: 1px dashed ${colors.highlight};
-    }
+export const ButtonContainer = styled.button`
+   pointer-events: auto;
+   background-color: rgba(0, 0, 0, 0);
+   border: none;
+   width: fit-content;
+   height: fit-content;
+   position: absolute;
+   left: 50%;
+   bottom: 5%;
+   transform: translate(-50%);
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   transition: all 0.3s ease;
+   cursor: pointer;
 
-    span {
-      text-shadow: 0px 0px 4px rgba(250, 208, 65, 0.75);
-    }
-  }
-`;
+   .icon {
+      color: white;
+   }
 
-const Inner = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 50px;
-  max-width: 200px;
-  border: 1px dashed white;
-  border-radius: 50px;
-  transition: all 0.3s ease-in-out;
-`;
+   p {
+      text-align: center;
+      font-size: 20px;
+   }
 
-const Text = styled.span`
-  user-select: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  font-family: ${others.fontFamily};
-  font-weight: lighter;
-  font-size: ${fontSize.button}px;
-  padding: 5px 20px 5px 20px;
-  color: ${colors.text};
-  transition: all 0.3s ease-in-out;
-  text-shadow: 0px 0px 4px black;
-  z-index: 2;
+   div {
+      padding: 15px 25px 15px 25px;
+      position: absolute;
+      width: fit-content;
+      height: fit-content;
+      transition: all 0.1s ease;
+      border: 1px solid ${colors.glassBorder};
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+   }
+
+   &:hover {
+      div {
+         border-color: ${colors.highlight};
+      }
+   }
+
+   &:active {
+      div {
+         transform-origin: center center;
+         transform: scale(0.9);
+      }
+   }
 `;

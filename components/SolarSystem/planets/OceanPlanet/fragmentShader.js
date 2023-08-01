@@ -78,9 +78,11 @@ const fragmentShader = /*glsl*/ `
 		//inner atmosphere
 		vec3 atmosphereColor = vec3(0.667,0.667,0.498);
 		float intensity = 1.0 - dot(vertexNormal, vec3(0.0, 0.0, 1.0));
-		vec3 atmosphere = vec3(atmosphereColor) * pow(intensity, 2.0) * uIntensity;
+		vec3 atmosphere = atmosphereColor * pow(intensity, 3.0) * uIntensity;
 
-		gl_FragColor = vec4(atmosphere+((f*f*f+.6*f*f+.5*f) * color), 1.0);
+		vec3 finalColor = atmosphere+(((f*f*f+0.6*f*f+0.5*f)*color));
+
+		gl_FragColor = vec4(finalColor, 1.0);
 	}
 `;
 

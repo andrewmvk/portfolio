@@ -5,7 +5,7 @@ import vertexShader from "./vertexShader";
 import * as THREE from "three";
 import PlanetTrail from "../PlanetTrail";
 
-const LonelyMoon = ({ position = [0, 0, 120] }) => {
+const LonelyMoon = ({ position = [0, 0, 120], onClick }) => {
    const uniforms = useMemo(
       () => ({
          uIntensity: {
@@ -38,6 +38,7 @@ const LonelyMoon = ({ position = [0, 0, 120] }) => {
             atmosphere={{ enabled: true, scale: 1.05 }}
             fragmentShader={fragmentShader}
             vertexShader={vertexShader}
+            onClick={onClick}
          />
       </>
    );
