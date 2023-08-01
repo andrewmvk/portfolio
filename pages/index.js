@@ -14,7 +14,6 @@ import {
 } from "@react-three/postprocessing";
 import LanguageSwitch from "../components/LanguageSwitch";
 import locales from "../public/locales";
-import { BsHandIndex } from "react-icons/bs";
 
 const TransitionScreen = React.forwardRef((props, ref) => {
    const transitionRef = useRef();
@@ -225,7 +224,6 @@ export default function Home() {
          <ScreensHtml ref={globalRefs} />
          <WaterMark />
          <LanguageSwitch ref={globalRefs} />
-         <BsHandIndex className="hand-icon" size={32} />
       </Container>
    );
 }
@@ -241,27 +239,6 @@ const Container = styled.div`
 
    #canvas {
       background: rgb(9, 9, 9);
-   }
-
-   .hand-icon {
-      color: white;
-      position: absolute;
-      right: 5%;
-      bottom: 10%;
-      transform-origin: right bottom;
-      animation: movement 2s ease infinite;
-
-      @keyframes movement {
-         0% {
-            transform: translate(-25%, 0%) rotateZ(-80deg);
-         }
-         50% {
-            transform: translate(25%, -10%) rotateZ(-10deg);
-         }
-         100% {
-            transform: translate(-25%, 0%) rotateZ(-80deg);
-         }
-      }
    }
 `;
 

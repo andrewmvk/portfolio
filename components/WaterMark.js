@@ -4,7 +4,9 @@ import styled from "styled-components";
 export default () => {
    return (
       <Container>
-         <Text>by Andrew Medeiros</Text>
+         <Text href="https://github.com/andrewmvk/portfolio" target="_blank">
+            by Andrew Medeiros
+         </Text>
       </Container>
    );
 };
@@ -25,7 +27,7 @@ const Container = styled.div`
    }
 `;
 
-const Text = styled.span`
+const Text = styled.a`
    color: #5f5f5f;
    white-space: nowrap;
    transition: all 0.3s ease-in-out;
