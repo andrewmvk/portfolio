@@ -12,10 +12,10 @@ import { AiFillAndroid } from "react-icons/ai";
 import { BsArrowDown, BsApple } from "react-icons/bs";
 import {
    Expo,
+   Firebase,
+   GoogleMaps,
    ReactDark,
    ReactNavigation,
-   GoogleMaps,
-   Firebase,
 } from "../../public/projects/logos";
 
 const resetedPositon = new Vector3(0, 0, 0);
@@ -145,24 +145,11 @@ export default React.forwardRef((props, ref) => {
                   <p>{texts.description}</p>
                   <h2>{texts.tecnologies}</h2>
                   <div className="technologies">
-                     <a href="https://reactnative.dev" target="_blank">
-                        <ReactDark />
-                     </a>
-                     <a href="https://docs.expo.dev" target="_blank">
-                        <Expo />
-                     </a>
-                     <a href="https://reactnavigation.org" target="_blank">
-                        <ReactNavigation />
-                     </a>
-                     <a href="https://firebase.google.com" target="_blank">
-                        <Firebase />
-                     </a>
-                     <a
-                        href="https://developers.google.com/maps"
-                        target="_blank"
-                     >
-                        <GoogleMaps />
-                     </a>
+                     <ReactDark />
+                     <Expo />
+                     <ReactNavigation />
+                     <Firebase />
+                     <GoogleMaps />
                   </div>
                   <h2>{texts.check}</h2>
                   <div className="platform-div">

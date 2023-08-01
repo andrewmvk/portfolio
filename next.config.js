@@ -1,21 +1,11 @@
 /**
  * @type {import('next').NextConfig}
- * @param {T} config
  */
 
 const nextConfig = {
    reactStrictMode: true,
    compiler: {
       styledComponents: true,
-   },
-
-   webpack(config) {
-      config.module.rules.push({
-         test: /\.svg$/,
-         use: ["@svgr/webpack"],
-      });
-
-      return config;
    },
 };
 
