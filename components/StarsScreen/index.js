@@ -1,9 +1,9 @@
 import { useFrame } from "@react-three/fiber";
 import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
-import StarsBackground from "../../components/StarsBackground";
+import StarsBackground from "../StarsBackground";
 import { Subtitle, TextContainer, Title } from "./styles";
-import Button from "../../components/Button";
+import Button from "../Button";
 
 export const StarsScreenHtml = React.forwardRef(({ handleTransition }, ref) => {
    const [texts, setTexts] = useState({

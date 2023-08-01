@@ -1,9 +1,9 @@
 import * as THREE from "three";
 import React, { useRef, Suspense, useEffect } from "react";
 import { OrbitControls } from "@react-three/drei";
-import SolarSystem from "../../components/SolarSystem";
+import SolarSystem from "../SolarSystem";
 import { useFrame, useThree } from "@react-three/fiber";
-import DynamicStars from "../../components/DynamicStars";
+import DynamicStars from "../DynamicStars";
 
 export default React.forwardRef((props, ref) => {
    const cameraRef = useRef();

@@ -3,9 +3,6 @@ import styled from "styled-components";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { toolsData } from "../styles/constants";
 import WaterMark from "../components/WaterMark";
-import StarsScreen, { StarsScreenHtml } from "./StarsScreen";
-import PlanetScreen from "./PlanetsScreen";
-import PlanetsScreenHtml from "./PlanetsScreen/Html";
 import {
    EffectComposer,
    GodRays,
@@ -14,6 +11,9 @@ import {
 } from "@react-three/postprocessing";
 import LanguageSwitch from "../components/LanguageSwitch";
 import locales from "../public/locales";
+import PlanetsScreen from "../components/PlanetsScreen";
+import PlanetsScreenHtml from "../components/PlanetsScreen/Html";
+import StarsScreen, { StarsScreenHtml } from "../components/StarsScreen";
 
 const TransitionScreen = React.forwardRef((props, ref) => {
    const transitionRef = useRef();
@@ -108,7 +108,7 @@ const Screens = React.forwardRef((props, ref) => {
 
    return (
       <>
-         {screen == 0 ? <PlanetScreen ref={ref} /> : null}
+         {screen == 0 ? <PlanetsScreen ref={ref} /> : null}
          {screen == -1 ? <StarsScreen ref={ref} /> : null}
       </>
    );
