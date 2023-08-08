@@ -18,7 +18,7 @@ export const Container = styled.div`
    display: grid;
    top: 50%;
    left: 50%;
-   transform: translate(-50%, 25%);
+   transform: translate(-50%, -50%);
    grid-template-columns: repeat(2, 1fr);
    width: 50vw;
    height: 80vh;
