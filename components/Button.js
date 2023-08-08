@@ -1,36 +1,21 @@
 import styled from "styled-components";
 import { colors } from "../styles/constants";
-import React, { useState } from "react";
-import { CgClose } from "react-icons/cg";
+import React from "react";
 
-export default React.forwardRef(({ onClick, text = "TEXT" }, ref) => {
-   const [clicked, setClicked] = useState(false);
-
-   const handleClick = () => {
-      if (ref && !clicked) {
-         if (!ref.current.cameraSettings.showingGUI) {
-            // Setted in the PlanetsScreen...
-            ref.current.others.setIllusion();
-            setClicked(true);
-         }
-      } else if (ref && clicked) {
-         ref.current.others.onIllusionClose();
-         setClicked(false);
-      } else {
-         onClick();
-      }
-   };
-
+export default ({ onClick, text = "TEXT" }) => {
    return (
-      <ButtonContainer onClick={handleClick}>
-         <div>
-            {clicked ? <CgClose size={28} className="icon" /> : <p>{text}</p>}
-         </div>
+      <ButtonContainer>
+         <input id="bottom-button" type="checkbox" onChange={onClick} />
+         <label htmlFor="bottom-button" className="bottom-button-label">
+            <div className="bar" />
+            <div className="bar" />
+            <p>{text}</p>
+         </label>
       </ButtonContainer>
    );
-});
+};
 
-export const ButtonContainer = styled.button`
+const ButtonContainer = styled.button`
    pointer-events: auto;
    background-color: rgba(0, 0, 0, 0);
    border: none;
@@ -44,18 +29,111 @@ export const ButtonContainer = styled.button`
    justify-content: center;
    align-items: center;
    transition: all 0.3s ease;
-   cursor: pointer;
 
-   .icon {
-      color: white;
+   @keyframes animate-bar2 {
+      0% {
+         transform: translate(100%, -100%);
+      }
+      33% {
+         transform: translate(0%, -100%);
+      }
+      66% {
+         transform: translate(0%, 0%);
+      }
+      100% {
+         transform: rotateZ(-45deg);
+      }
    }
 
-   p {
-      text-align: center;
-      font-size: 20px;
+   @keyframes animate-bar1 {
+      0% {
+         transform: translate(-100%, 100%);
+      }
+      33% {
+         transform: translate(0%, 100%);
+      }
+      66% {
+         transform: translate(0%, 0%);
+      }
+      100% {
+         transform: rotateZ(45deg);
+      }
    }
 
-   div {
+   #bottom-button {
+      appearance: none;
+
+      &:hover + label {
+         border-color: ${colors.highlight};
+      }
+   }
+
+   #bottom-button:checked + label {
+      p {
+         opacity: 0;
+      }
+      .bar {
+         opacity: 1;
+         &:nth-child(1) {
+            animation: animate-bar1 0.5s ease;
+            animation-fill-mode: forwards;
+         }
+         &:nth-child(2) {
+            animation: animate-bar2 0.5s ease;
+            animation-fill-mode: forwards;
+         }
+      }
+   }
+
+   @keyframes animate-bar2-reverse {
+      0% {
+         transform: rotateZ(-45deg);
+      }
+      33% {
+         transform: translate(0%, 0%) rotateZ(0deg);
+      }
+      66% {
+         transform: translate(0%, -100%);
+      }
+      100% {
+         transform: translate(100%, -100%);
+      }
+   }
+
+   @keyframes animate-bar1-reverse {
+      0% {
+         transform: rotateZ(45deg);
+      }
+      33% {
+         transform: translate(0%, 0%);
+      }
+      66% {
+         transform: translate(0%, 100%);
+      }
+      100% {
+         transform: translate(-100%, 100%);
+      }
+   }
+
+   #bottom-button:not(:checked) + label {
+      p {
+         opacity: 1;
+         transition-delay: 0.5s;
+      }
+      .bar {
+         opacity: 0;
+         &:nth-child(1) {
+            animation: animate-bar1-reverse 0.5s ease;
+            animation-fill-mode: forwards;
+         }
+         &:nth-child(2) {
+            animation: animate-bar2-reverse 0.5s ease;
+            animation-fill-mode: forwards;
+         }
+      }
+   }
+
+   .bottom-button-label {
       padding: 15px 25px 15px 25px;
       position: absolute;
       width: fit-content;
@@ -66,17 +144,28 @@ export const ButtonContainer = styled.button`
       display: flex;
       justify-content: center;
       align-items: center;
-   }
+      cursor: pointer;
 
-   &:hover {
-      div {
-         border-color: ${colors.highlight};
+      .bar {
+         position: absolute;
+         background-color: white;
+         width: 30px;
+         height: 3px;
+         border-radius: 5px;
+         transition: 0.5s linear;
+         opacity: 0;
       }
    }
 
+   p {
+      text-align: center;
+      font-size: 20px;
+      transition: 0.5s linear;
+   }
+
    &:active {
-      div {
-         transform-origin: center center;
+      label {
+         transform-origin: center;
          transform: scale(0.9);
       }
    }

@@ -50,17 +50,15 @@ export default React.forwardRef((props, ref) => {
       });
    };
 
-   const handleShowProject = (project = "none") => {
-      setData({ ...data, isVisible: true, project: project });
-      handleLangChange();
-      ref.current.locales.remount = handleLangChange;
-   };
-
-   const handleProjectClose = () => {
-      setData({ ...data, isVisible: false });
-      // Call the function setted by the "PlanetsScreen" so the user can zoom in and out again
-      ref.current.others.onProjectClose();
-      ref.current.cameraSettings.lookingAt = resetedPositon;
+   const handleShowProject = (project = "none", show = true) => {
+      setData({ ...data, isVisible: show, project: project });
+      if (show) {
+         handleLangChange();
+         ref.current.locales.remount = handleLangChange;
+      } else {
+         ref.current.others.onProjectClose();
+         ref.current.cameraSettings.lookingAt = resetedPositon;
+      }
    };
 
    useEffect(() => {
@@ -128,11 +126,14 @@ export default React.forwardRef((props, ref) => {
    };
 
    return data.isVisible ? (
-      <Container onWheel={data.project !== "none" ? handleScroll : null}>
+      <Container
+         onWheel={data.project !== "none" ? handleScroll : null}
+         className="glass shadow-div"
+      >
          <CgClose
             className="icon corner close"
             size={28}
-            onClick={handleProjectClose}
+            onClick={() => handleShowProject("none", false)}
          />
          {data.project !== "none" ? (
             <>
@@ -152,23 +153,25 @@ export default React.forwardRef((props, ref) => {
                      <GoogleMaps />
                   </div>
                   <h2>{texts.check}</h2>
-                  <div className="platform-div">
-                     <a
-                        href="https://play.google.com/store/apps/details?id=com.euquero.ufma.app"
-                        target="_blank"
-                     >
-                        <AiFillAndroid className="icon android" size={36} />
-                        <h3>Android</h3>
-                     </a>
-                  </div>
-                  <div className="platform-div">
-                     <a
-                        href="https://apps.apple.com/br/app/euquero-app/id6448930823"
-                        target="_blank"
-                     >
-                        <BsApple className="icon ios" size={36} />
-                        <h3>iOS</h3>
-                     </a>
+                  <div className="platforms">
+                     <div className="platform-div">
+                        <a
+                           href="https://play.google.com/store/apps/details?id=com.euquero.ufma.app"
+                           target="_blank"
+                        >
+                           <AiFillAndroid className="icon android" size={36} />
+                           <h3>Android</h3>
+                        </a>
+                     </div>
+                     <div className="platform-div">
+                        <a
+                           href="https://apps.apple.com/br/app/euquero-app/id6448930823"
+                           target="_blank"
+                        >
+                           <BsApple className="icon ios" size={36} />
+                           <h3>iOS</h3>
+                        </a>
+                     </div>
                   </div>
                </TextContainer>
                <ImageContainer ref={imagesRef}>

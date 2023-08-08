@@ -17,8 +17,8 @@ const Container = styled.div`
    display: flex;
    padding: 5px;
    border: 1px solid white;
-   height: 50px;
-   width: max-content;
+   height: fit-content;
+   width: fit-content;
    border-radius: 50px;
    justify-content: center;
    align-items: center;
@@ -43,8 +43,8 @@ const Inner = styled.div`
    display: flex;
    justify-content: center;
    align-items: center;
-   height: 100%;
-   max-width: 200px;
+   height: fit-content;
+   max-width: fit-content;
    border: 1px dashed white;
    border-radius: 50px;
    transition: all 0.3s ease-in-out;
@@ -56,8 +56,12 @@ const Text = styled.p`
    -webkit-user-select: none;
    -ms-user-select: none;
    font-weight: lighter;
-   padding: 5px 20px 5px 20px;
+   padding: 10px 20px 10px 20px;
    transition: all 0.3s ease-in-out;
    text-shadow: 0px 0px 4px black;
    z-index: 2;
+
+   @media screen and (max-width: 1700px) {
+      padding: 6px 12px 6px 12px;
+   }
 `;

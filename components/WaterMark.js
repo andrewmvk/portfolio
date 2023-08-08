@@ -19,16 +19,13 @@ const Container = styled.div`
    left: 1%;
    display: inline-block;
    cursor: pointer;
-
-   &:hover {
-      span {
-         color: #fff;
-      }
-   }
 `;
 
 const Text = styled.a`
    color: #5f5f5f;
    white-space: nowrap;
    transition: all 0.3s ease-in-out;
+   &:hover {
+      color: #fff;
+   }
 `;

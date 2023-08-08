@@ -21,13 +21,14 @@ export const Container = styled.div`
    transform: translate(-50%, -50%);
    grid-template-columns: repeat(2, 1fr);
    width: 50vw;
-   height: 75vh;
-   background: ${colors.glassBg};
+   height: 80vh;
    border-radius: 20px;
-   backdrop-filter: blur(${others.blur}px);
-   -webkit-backdrop-filter: blur(${others.blur}px);
-   border: 1px solid ${colors.glassBorder};
    animation: initialize ease 250ms;
+   background: radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.01),
+      rgba(255, 255, 255, 0)
+   );
 
    .icon {
       color: white;
@@ -91,7 +92,7 @@ export const TitleContainer = styled.div`
    z-index: 1;
 
    h1 {
-      padding: 10px 0px 20px 0px;
+      padding: 20px 0px 20px 0px;
    }
 
    div {
@@ -123,6 +124,24 @@ export const TextContainer = styled.div`
 
    p {
       margin: 15px 0px 20px 0px;
+      padding-right: 20px;
+      max-height: 260px;
+      overflow-y: scroll;
+
+      &::-webkit-scrollbar {
+         width: 8px;
+      }
+      &::-webkit-scrollbar-track {
+         border-radius: 10px;
+         background-color: rgba(19, 20, 22, 0.5);
+         &:hover {
+            background-color: rgba(19, 20, 22, 1);
+         }
+      }
+      &::-webkit-scrollbar-thumb {
+         background-color: #313439;
+         border-radius: 10px;
+      }
    }
 
    .icon {
@@ -156,6 +175,43 @@ export const TextContainer = styled.div`
 
       * {
          cursor: pointer;
+      }
+   }
+
+   @media screen and (max-width: 1700px) {
+      .logo-icon {
+         transform-origin: center;
+         transform: scale(0.8);
+      }
+
+      p {
+         max-height: 240px;
+      }
+
+      .platforms {
+         display: flex;
+         gap: 15px;
+      }
+   }
+
+   @media screen and (max-width: 1500px) {
+      p {
+         max-height: 240px;
+         margin: 10px 0px 15px 0px;
+      }
+
+      .technologies {
+         margin-bottom: 5px;
+      }
+
+      a > .icon {
+         transform: scale(0.8);
+      }
+   }
+
+   @media screen and (max-width: 1300px) {
+      p {
+         max-height: 200px;
       }
    }
 `;

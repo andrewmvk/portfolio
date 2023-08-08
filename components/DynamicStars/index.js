@@ -4,20 +4,9 @@ import React, { useCallback, useMemo, useRef, useState } from "react";
 import { Html, Point, PointMaterial, Points } from "@react-three/drei";
 import * as THREE from "three";
 import StaticStars from "../StaticStars";
-import { useEffect } from "react";
 
 const Word = React.forwardRef(
-   (
-      {
-         children,
-         revealedWord,
-         position,
-         handleItemClick,
-         index,
-         distanceFactor,
-      },
-      ref
-   ) => {
+   ({ children, revealedWord, position, index, distanceFactor }, ref) => {
       const [wordData, setWordData] = useState({
          word: children,
          revealed: false,
@@ -26,49 +15,18 @@ const Word = React.forwardRef(
       const titleRef = useRef();
       const sSize = 8;
 
-      useEffect(() => {
-         const handleClick = () => {
-            const titleStyle = titleRef.current.style;
-            const circleStyle = circleRef.current.style;
-            if (ref.current.cameraSettings.showingGUI) {
-               out(true);
-               titleStyle.pointerEvents = "none";
-               titleStyle.opacity = 0.5;
-               titleStyle.userSelect = "none";
-               circleStyle.pointerEvents = "none";
-               circleStyle.opacity = 0.5;
-            } else {
-               titleStyle.pointerEvents = "auto";
-               titleStyle.opacity = 1;
-               titleStyle.userSelect = "auto";
-               circleStyle.pointerEvents = "auto";
-               circleStyle.opacity = 1;
-            }
-         };
-
-         document.addEventListener("click", handleClick);
-
-         return () => {
-            document.removeEventListener("click", handleClick);
-         };
-      }, []);
-
       const over = e => {
-         if (!ref.current.cameraSettings.showingGUI) {
-            e.stopPropagation();
-            document.body.style.cursor = "pointer";
-            titleRef.current.style.color = colors.highlight;
-            circleRef.current.style.transform = "scale(2)";
-            if (!wordData.revealed) handleHover();
-         }
+         e.stopPropagation();
+         document.body.style.cursor = "pointer";
+         titleRef.current.style.color = colors.highlight;
+         circleRef.current.style.transform = "scale(2)";
+         if (!wordData.revealed) handleHover();
       };
 
-      const out = (force = false) => {
-         if (!ref.current.cameraSettings.showingGUI || force) {
-            document.body.style.cursor = "default";
-            titleRef.current.style.color = "white";
-            circleRef.current.style.transform = "scale(1)";
-         }
+      const out = () => {
+         document.body.style.cursor = "default";
+         titleRef.current.style.color = "white";
+         circleRef.current.style.transform = "scale(1)";
       };
 
       const handleHover = useCallback(() => {
@@ -101,7 +59,10 @@ const Word = React.forwardRef(
                <StarTitle
                   ref={titleRef}
                   onClick={() =>
-                     handleItemClick({ name: wordData.word, position }, index)
+                     ref.current.others.handleStarClick(
+                        { name: wordData.word, position },
+                        index
+                     )
                   }
                   onPointerOver={over}
                   onPointerOut={out}
@@ -114,7 +75,7 @@ const Word = React.forwardRef(
    }
 );
 
-export default React.forwardRef(({ radius = 300, handleItemClick }, ref) => {
+export default React.forwardRef(({ radius = 300 }, ref) => {
    // --------- Dynamic stars Configuration --------------
 
    const words = useMemo(() => {
@@ -138,6 +99,8 @@ export default React.forwardRef(({ radius = 300, handleItemClick }, ref) => {
          const wordPos = new THREE.Vector3().setFromSpherical(
             spherical.set(radius, phi, theta)
          );
+         //Save its position, so the StarsList can access it
+         technologies[i].position = wordPos;
 
          const originalWord = technologies[i].name;
          //This is a array that contains the word position, the 'cryptographic format' of the word and the word itself
@@ -187,7 +150,6 @@ export default React.forwardRef(({ radius = 300, handleItemClick }, ref) => {
                <Word
                   key={index}
                   index={index}
-                  handleItemClick={handleItemClick}
                   revealedWord={revealedWord}
                   position={pos}
                   children={word}

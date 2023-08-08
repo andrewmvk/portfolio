@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import * as THREE from "three";
 import styled from "styled-components";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { toolsData } from "../styles/constants";
@@ -22,21 +23,16 @@ const TransitionScreen = React.forwardRef((props, ref) => {
       if (transitionRef.current) {
          let value = 0;
          const interval = setInterval(() => {
-            value += 2;
+            value += 1;
+            const g = value * 0.05 + 9;
             if (isGoing) {
-               transitionRef.current.style.background =
-                  "radial-gradient(circle, rgba(250, 250, 250, 1)" +
-                  value +
-                  "%, rgba(250, 250, 250, 0)" +
-                  value * 1.2 +
-                  "%)";
+               transitionRef.current.style.background = `radial-gradient(circle, rgba(${g}, ${g}, ${g}, 1) ${value}%, rgba(9, 9, 9, 0) ${
+                  value * 1.2
+               }%)`;
             } else {
-               transitionRef.current.style.background =
-                  "radial-gradient(circle, rgba(250, 250, 250, 0)" +
-                  value +
-                  "%, rgba(250, 250, 250, 1)" +
-                  value * 1.2 +
-                  "%)";
+               transitionRef.current.style.background = `radial-gradient(circle, rgba(${g}, ${g}, ${g}, 0) ${value}%, rgba(9, 9, 9, 1) ${
+                  value * 1.2
+               }%)`;
             }
 
             if (value >= 100) {
@@ -53,33 +49,36 @@ const TransitionScreen = React.forwardRef((props, ref) => {
    return <TransitionBackground ref={transitionRef} />;
 });
 
-const ScreensHtml = React.forwardRef((props, ref) => {
-   const [screenHtml, setScreenHtml] = useState(-1);
+const ScreensHtml = React.forwardRef(({ initial = -1 }, ref) => {
+   const [screenHtml, setScreenHtml] = useState(initial);
 
-   const handleTransition = (index, stop = false) => {
+   const handleTransition = index => {
       //This function will do nothing if the user is already on the page
       if (screenHtml == -1) {
          const maxVelocity = ref.current.stars.maxVelocity;
+         const minVelocity = ref.current.stars.initialVelocity;
          let newVelocity = ref.current.stars.currentVelocity;
-         if (!stop) {
-            //A interval setted to make a acceleration effect to the stars movement
-            const interval = setInterval(() => {
-               newVelocity += ref.current.stars.acceleration;
-               ref.current.stars.currentVelocity = newVelocity;
-               if (newVelocity >= maxVelocity) {
-                  //When reach the max speed, it will start the transition and change the screen
-                  ref.current.transition.start(true);
-                  setTimeout(() => {
-                     ref.current.screen.changeScreen(index);
-                     setScreenHtml(0);
-                     ref.current.transition.start(false);
-                  }, 1000);
-                  clearInterval(interval);
-               }
-            }, 10);
-         } else {
-            //When the user wants to stop the transition
-         }
+         //A interval setted to make a acceleration effect to the stars movement
+
+         ref.current.stars.running = true;
+         const interval = setInterval(() => {
+            newVelocity += ref.current.stars.acceleration;
+            ref.current.stars.currentVelocity = newVelocity;
+            if (newVelocity >= maxVelocity) {
+               //When reach the max speed, it will start the transition and change the screen
+               ref.current.transition.start(true);
+               setTimeout(() => {
+                  ref.current.screen.changeScreen(index);
+                  setScreenHtml(index);
+                  ref.current.transition.start(false);
+               }, 1000);
+               clearInterval(interval);
+               ref.current.stars.running = false;
+            } else if (newVelocity <= minVelocity) {
+               clearInterval(interval);
+               ref.current.stars.running = false;
+            }
+         }, 10);
       }
    };
 
@@ -95,8 +94,8 @@ const ScreensHtml = React.forwardRef((props, ref) => {
    );
 });
 
-const Screens = React.forwardRef((props, ref) => {
-   const [screen, setScreen] = useState(-1);
+const Screens = React.forwardRef(({ initial = -1 }, ref) => {
+   const [screen, setScreen] = useState(initial);
 
    const changeScreen = (index = 0) => {
       setScreen(index);
@@ -163,9 +162,9 @@ export default function Home() {
          y: 0,
       },
       cameraSettings: {
-         lookingAt: null,
          illusionPage: false,
-         showingGUI: false,
+         lookingAt: new THREE.Vector3(0, 0, 0),
+         GUI: { showing: false, name: "" },
       },
       //TransitionScreen reference, the value is used to increase(>0), decrease(<0) or do nothing (=0)
       transition: {
@@ -180,6 +179,7 @@ export default function Home() {
          currentVelocity: 1,
          maxVelocity: 25,
          acceleration: 0.05,
+         running: false,
       },
       tools: {
          //The selected value is the current selected star, it can goes from 0 to the toolsData length (index)
@@ -198,6 +198,7 @@ export default function Home() {
          setIllusion: functionNotSetted,
          onIllusionClose: functionNotSetted,
          setShowBiography: functionNotSetted,
+         handleStarClick: functionNotSetted,
       },
       locales: {
          data: locales,
@@ -218,10 +219,10 @@ export default function Home() {
             resize={{ scroll: false }}
             camera={{ position: [0, 0, 0], fov: 75, far: 1500 }}
          >
-            <Screens ref={globalRefs} />
+            <Screens ref={globalRefs} initial={-1} />
             <Effects ref={globalRefs} />
          </Canvas>
-         <ScreensHtml ref={globalRefs} />
+         <ScreensHtml ref={globalRefs} initial={-1} />
          <WaterMark />
          <LanguageSwitch ref={globalRefs} />
       </Container>

@@ -25,6 +25,10 @@ export const Title = styled.h1`
    pointer-events: none;
    line-height: 40px;
 
+   @media screen and (max-width: 1550px) {
+      font-size: 45px;
+   }
+
    @keyframes fadeInUp {
       0% {
          transform: translateY(-200%);
@@ -52,6 +56,10 @@ export const Subtitle = styled.h2`
    color: ${colors.highlight};
    font-weight: normal;
    pointer-events: none;
+
+   @media screen and (max-width: 1550px) {
+      font-size: 30px;
+   }
 
    @keyframes fadeInDown {
       0% {

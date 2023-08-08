@@ -34,35 +34,35 @@ export default React.forwardRef((props, ref) => {
    };
 
    useFrame(() => {
-      const lookingAtPosition = ref.current.cameraSettings.lookingAt;
-      if (lookingAtPosition) {
-         const target = cameraRef.current.target;
-         for (let coord in target) {
-            target[coord] = THREE.MathUtils.lerp(
-               cameraRef.current.target[coord],
-               lookingAtPosition[coord] / 1.5,
-               0.02
-            );
-         }
+      const pos = ref.current.cameraSettings.lookingAt;
+      const target = cameraRef.current.target;
+      for (let coord in target) {
+         target[coord] = THREE.MathUtils.lerp(
+            cameraRef.current.target[coord],
+            pos[coord] / 1.5,
+            0.02
+         );
       }
 
-      const illusionPage = ref.current.cameraSettings.illusionPage;
+      if (pos.x === 0 && pos.y === 0 && pos.z === 0) {
+         const illusionPage = ref.current.cameraSettings.illusionPage;
 
-      const distance = calcDistance();
-      if (illusionPage) {
-         const maxDistance = cameraRef.current.maxDistance;
-         if (distance < maxDistance - 20) {
-            adjustCameraPosition(
-               cameraRef.current.maxDistance,
-               cameraRef.current.object.position
-            );
+         const distance = calcDistance();
+         if (illusionPage) {
+            const maxDistance = cameraRef.current.maxDistance;
+            if (distance < maxDistance - 20) {
+               adjustCameraPosition(
+                  cameraRef.current.maxDistance,
+                  cameraRef.current.object.position
+               );
+            } else {
+               cameraRef.current.minDistance = maxDistance - 20;
+            }
+         } else if (distance > 240) {
+            adjustCameraPosition(220, cameraRef.current.object.position);
          } else {
-            cameraRef.current.minDistance = maxDistance - 20;
+            cameraRef.current.maxDistance = 240;
          }
-      } else if (distance > 240) {
-         adjustCameraPosition(220, cameraRef.current.object.position);
-      } else {
-         cameraRef.current.maxDistance = 240;
       }
    });
 
@@ -74,8 +74,12 @@ export default React.forwardRef((props, ref) => {
       // ------------------------- Setting functions to global ref ----------------------------
       // Called in "./Html", make the camera goes far (in the useFrame) and set some settings
       ref.current.others.setIllusion = () => {
+         ref.current.others.setShowProject("none", false);
+         ref.current.others.setModal(false);
+         ref.current.others.onModalClose();
          cameraRef.current.maxDistance = 900;
-         ref.current.cameraSettings.showingGUI = true;
+         ref.current.cameraSettings.GUI.showing = true;
+         ref.current.cameraSettings.GUI.name = "biography";
          ref.current.cameraSettings.illusionPage = true;
          ref.current.others.setShowBiography(true);
       };
@@ -83,30 +87,52 @@ export default React.forwardRef((props, ref) => {
       // Called in "./Html", reset camera settings
       ref.current.others.onIllusionClose = () => {
          cameraRef.current.minDistance = 20;
-         ref.current.cameraSettings.showingGUI = false;
+         ref.current.cameraSettings.GUI.showing = false;
          ref.current.cameraSettings.illusionPage = false;
          ref.current.others.setShowBiography(false);
       };
 
       // Called in "Project", reset the camera zoom setting
       ref.current.others.onProjectClose = () => {
-         ref.current.cameraSettings.showingGUI = false;
+         ref.current.cameraSettings.GUI.showing = false;
          cameraRef.current.enableZoom = true;
       };
 
       // Called in "Modal", reset the camera settings
       ref.current.others.onModalClose = () => {
-         cameraRef.current.maxDistance = 220;
          cameraRef.current.enableZoom = true;
          cameraRef.current.enableRotate = true;
-         ref.current.cameraSettings.showingGUI = false;
+         ref.current.cameraSettings.GUI.showing = false;
+      };
+
+      // Called in DynamicStars and in StarsList
+      ref.current.others.handleStarClick = (item, index) => {
+         ref.current.others.setShowBiography(false);
+         ref.current.others.setShowProject("none", false);
+         const GUI = ref.current.cameraSettings.GUI;
+         if (
+            item.position &&
+            ref.current.others.setModal != null &&
+            (!GUI.showing || GUI.name == "modal")
+         ) {
+            ref.current.cameraSettings.GUI.showing = true;
+            ref.current.cameraSettings.GUI.name = "modal";
+            ref.current.tools.selected = index;
+            ref.current.cameraSettings.lookingAt = item.position;
+
+            cameraRef.current.enableZoom = false;
+            cameraRef.current.enableRotate = false;
+            // Function setted in "Modal"
+            ref.current.others.setModal();
+         }
       };
    }, []);
 
    // Function setted here and called by the planet when it is clicked
    const handlePlanetClick = (project = "none", planet) => {
-      if (!ref.current.cameraSettings.showingGUI) {
-         ref.current.cameraSettings.showingGUI = true;
+      if (!ref.current.cameraSettings.GUI.showing) {
+         ref.current.cameraSettings.GUI.showing = true;
+         ref.current.cameraSettings.GUI.name = "project";
          // First show the project related to the planet (setted in "Solar System")
          ref.current.others.setShowProject(project);
          // Disable zoom for a better experience
@@ -114,21 +140,6 @@ export default React.forwardRef((props, ref) => {
 
          // Set the position of the planet using it's reference so the camera can follow it
          ref.current.cameraSettings.lookingAt = planet.current.position;
-      }
-   };
-
-   const handleStarClick = (item, index) => {
-      const showingGUI = ref.current.cameraSettings.showingGUI;
-      if (item.position && ref.current.others.setModal != null && !showingGUI) {
-         ref.current.cameraSettings.showingGUI = true;
-         ref.current.tools.selected = index;
-         ref.current.cameraSettings.lookingAt = item.position;
-
-         cameraRef.current.enableZoom = false;
-         cameraRef.current.enableRotate = false;
-         cameraRef.current.maxDistance = 1000;
-         // Function setted in "Modal"
-         ref.current.others.setModal();
       }
    };
 
@@ -146,11 +157,7 @@ export default React.forwardRef((props, ref) => {
          <Suspense fallback={null}>
             <SolarSystem handlePlanetClick={handlePlanetClick} ref={ref} />
          </Suspense>
-         <DynamicStars
-            handleItemClick={handleStarClick}
-            radius={500}
-            ref={ref}
-         />
+         <DynamicStars radius={500} ref={ref} />
       </>
    );
 });

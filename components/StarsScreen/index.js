@@ -41,6 +41,20 @@ export const StarsScreenHtml = React.forwardRef(({ handleTransition }, ref) => {
       });
    };
 
+   const handleClick = e => {
+      const acceleration = ref.current.stars.acceleration;
+      if (e.target.checked) {
+         if (acceleration < 0) {
+            ref.current.stars.acceleration = -acceleration;
+         }
+         if (!ref.current.stars.running) {
+            handleTransition(0);
+         }
+      } else {
+         ref.current.stars.acceleration = -acceleration;
+      }
+   };
+
    return (
       <>
          <TextContainer>
@@ -51,7 +65,7 @@ export const StarsScreenHtml = React.forwardRef(({ handleTransition }, ref) => {
                <Paragraph text={texts.subtitle} delay={texts.title.length} />
             </Subtitle>
          </TextContainer>
-         <Button text={texts.button} onClick={() => handleTransition(0)} />
+         <Button text={texts.button} onClick={handleClick} />
       </>
    );
 });

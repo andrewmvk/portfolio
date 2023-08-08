@@ -1,9 +1,18 @@
 import styled from "styled-components";
 import { colors, others } from "../../styles/constants";
 
+export const OuterContainer = styled.div`
+   position: absolute;
+   top: 0;
+   left: 0;
+   pointer-events: none;
+   width: 100vw;
+   height: 100vh;
+`;
+
 export const ImageContainer = styled.div`
-   width: 150px;
-   height: 150px;
+   width: 130px;
+   height: 130px;
    overflow: hidden;
    display: flex;
    align-items: center;
@@ -12,11 +21,22 @@ export const ImageContainer = styled.div`
    margin-right: 50px;
    float: left;
    border: 2px solid ${colors.glassBorder};
+
+   img {
+      object-fit: cover;
+      max-width: 100%;
+   }
+
+   @media screen and (max-width: 1700px) {
+      width: 110px;
+      height: 110px;
+   }
 `;
 
 export const BigContainer = styled.div`
    display: flex;
    justify-content: space-between;
+   min-height: 200px;
    flex: 3.5;
    overflow-x: scroll;
    &::-webkit-scrollbar {
@@ -32,42 +52,66 @@ export const BigContainer = styled.div`
 export const Contact = styled.form`
    display: flex;
    flex: 3.5;
+   min-height: 220px;
    flex-direction: column;
    justify-content: space-between;
 `;
 
 export const Container = styled.div`
-   @keyframes initialize {
-      from {
-         opacity: 0;
-         transform: translate(-50%, 25%);
-      }
-      to {
-         opacity: 1;
-         transform: translate(-50%, -50%);
-      }
-   }
-
    pointer-events: auto;
    position: absolute;
    display: flex;
-   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   overflow: hidden;
    width: 70vw;
    height: 80vh;
+   opacity: 0;
    top: 50%;
    left: 50%;
-   transform: translate(-50%, -50%);
-   background: ${colors.glassBg};
+   transform: translate(-50%, 50%);
    border-radius: 20px;
-   backdrop-filter: blur(${others.blur}px);
-   -webkit-backdrop-filter: blur(${others.blur}px);
-   border: 1px solid ${colors.glassBorder};
    box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
    padding: 40px 60px 40px 60px;
-   animation: initialize ease 250ms;
+   transition: 0.3s ease;
+   background: radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.01),
+      rgba(255, 255, 255, 0)
+   );
+
+   .scroll-div {
+      display: flex;
+      flex-direction: column;
+      overflow-y: scroll;
+      height: 100%;
+      width: 100%;
+      padding: 2px;
+
+      &::-webkit-scrollbar {
+         width: 0;
+         @media screen and (max-height: 850px) {
+            width: 8px;
+            padding: 4px;
+            border-radius: 10px;
+            background-color: rgba(19, 20, 22, 0.5);
+            &:hover {
+               background-color: rgba(19, 20, 22, 1);
+            }
+         }
+      }
+      &::-webkit-scrollbar-thumb {
+         background-color: #313439;
+         border-radius: 10px;
+      }
+   }
+
+   #header {
+      min-height: 150px;
+   }
 
    @media screen and (max-width: 910px) {
-      overflow-y: scroll;
+      flex-direction: column;
 
       #header {
          div {
@@ -78,7 +122,7 @@ export const Container = styled.div`
                ${ImageContainer} {
                   float: none;
                   margin: 10px 0 10px 0;
-                  max-width: 150px;
+                  max-width: 110px;
                }
             }
             flex-direction: row;
@@ -98,13 +142,40 @@ export const Container = styled.div`
       }
    }
 
-   .icon-close {
+   .close {
       position: absolute;
-      color: white;
       top: 25px;
       right: 25px;
-      cursor: pointer;
-      z-index: 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      #icon-close {
+         appearance: none;
+      }
+
+      label {
+         padding: 15px;
+         position: absolute;
+         width: fit-content;
+         height: fit-content;
+         cursor: pointer;
+
+         .bar {
+            position: absolute;
+            background-color: white;
+            width: 25px;
+            height: 3px;
+            border-radius: 5px;
+         }
+
+         .bar:nth-child(1) {
+            transform: rotateZ(-45deg);
+         }
+         .bar:nth-child(2) {
+            transform: rotateZ(45deg);
+         }
+      }
    }
 `;
 
@@ -115,6 +186,10 @@ export const SmallContainer = styled.div`
    text-align: center;
    min-height: 100%;
    min-width: 330px;
+
+   @media screen and (max-width: 1700px) {
+      min-width: 280px;
+   }
 `;
 
 export const Text = styled.p`
@@ -136,7 +211,7 @@ export const Text = styled.p`
 export const HighlightInput = styled.input`
    border: 1px solid ${colors.glassBorder};
    border-radius: 10px;
-   height: 80%;
+   min-height: 80%;
    width: 100%;
 `;
 
@@ -151,7 +226,7 @@ export const HighlightTextArea = styled.textarea`
 export const SubmitButton = styled.button`
    border: none;
    border-radius: 10px;
-   height: 80%;
+   min-height: 80%;
    width: 100%;
    background-color: ${colors.highlight};
    display: flex;
