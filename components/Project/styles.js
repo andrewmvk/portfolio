@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { colors, others } from "../../styles/constants";
 
 export const Container = styled.div`
-   @keyframes initialize {
+   @keyframes initializeProject {
       from {
          opacity: 0;
          transform: translate(-50%, 25%);
@@ -18,12 +18,12 @@ export const Container = styled.div`
    display: grid;
    top: 50%;
    left: 50%;
-   transform: translate(-50%, -50%);
+   transform: translate(-50%, 25%);
    grid-template-columns: repeat(2, 1fr);
    width: 50vw;
    height: 80vh;
    border-radius: 20px;
-   animation: initialize ease 250ms;
+   animation: initializeProject ease 250ms;
    background: radial-gradient(
       circle,
       rgba(255, 255, 255, 0.01),

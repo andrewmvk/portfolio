@@ -110,7 +110,7 @@ export const Container = styled.div`
       transition: all 0.3s ease-in-out;
       box-shadow: 0 5px 5px rgba(0, 0, 0, 0.25);
 
-      @keyframes initialize {
+      @keyframes initializeStarsListIcon {
          from {
             opacity: 0;
             transform: rotateZ(90deg);
@@ -127,7 +127,7 @@ export const Container = styled.div`
          border-radius: 3px;
          background-color: ${colors.highlight};
          transition: all 0.5s ease-in-out;
-         animation: initialize 0.3s ease;
+         animation: initializeStarsListIcon 0.3s ease;
       }
 
       .single-bar:nth-child(1) {
