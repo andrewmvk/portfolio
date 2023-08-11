@@ -21,7 +21,13 @@ export default function App({ Component, pageProps }: AppProps) {
    return (
       <main className={montserrat.className}>
          <Head>
-            <link rel="icon" href="/favicon.ico" sizes="any" />
+            <title>Andrew Medeiros</title>
+            <link
+               rel="shortcut icon"
+               type="image/x-icon"
+               href="./favicon.ico"
+               sizes="any"
+            />
          </Head>
          <Component {...pageProps} />
       </main>
