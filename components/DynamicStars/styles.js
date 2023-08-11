@@ -18,5 +18,6 @@ export const StarTitle = styled.span`
    font-size: 600px;
    padding: 50px;
    transition: all 0.3s ease-in-out;
+   user-select: none;
    color: white;
 `;

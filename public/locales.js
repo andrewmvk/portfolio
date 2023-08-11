@@ -158,7 +158,7 @@ export default {
          title: "THE ILLUSION",
          subtitle: "BEHIND THE SCENE",
          description:
-            "Bor in 08/2001. Graduating in Computer Engineering at the Federal University of Goiás (UFG) since 2020/1. Participated as a collaborator focused on the development of websites and applications at ELO Júnior for one and a half year. I love to code and play video games.",
+            "Born in 08/08/2001. Graduating in Computer Engineering at the Federal University of Goiás (UFG) since second semester of 2020. Participated as a collaborator focused on the development of websites and applications at ELO Júnior for one and a half year. I love to code and play video games.",
          past: "PAST",
          pastDescription:
             "I've always been passionate about computing, but my desire to code came when I entered the university. I chose Computer Engineering with the aim of finding the area that best fit me, I didn't see myself as a programmer, but it is where I am now.",
@@ -278,7 +278,7 @@ export default {
             knowledgeLevel: "INTERMEDIÁRIO",
             knowValue: 2,
             description:
-               "Adquiri um conhecimento básico em design quando realizei meu primeiro projeto prático a partir do membro do time que era responsável por isso. Eu levo meu tempo para conseguir consiliar o que eu penso para o design com a experiência do usuário então sempre mudo minha opinião sobre algo, este site não era assim no primeiro mês, não foi assim no segundo e continuou mudando até o final.",
+               "Adquiri um conhecimento básico em design quando realizei meu primeiro projeto prático a partir do membro do time que era responsável por isso. Eu levo meu tempo para conseguir conciliar o que eu penso para o design com a experiência do usuário então sempre mudo minha opinião sobre algo, este site não era assim no primeiro mês, não foi assim no segundo e continuou mudando até o final.",
          },
          {
             name: "FIGMA",
@@ -339,7 +339,7 @@ export default {
          title: "A ILUSÃO",
          subtitle: "POR TRÁS DA CENA",
          description:
-            "Nascido em 08/2001. Graduando em Engenharia de Computação na Universidade Federal de Goiás (UFG) desde 2020/1. Participou como colaborador focado no desenvolvimento de sites e aplicativos da ELO Júnior durante um ano e meio. Adoro programar e jogar.",
+            "Nascido em 08/08/2001. Graduando em Engenharia de Computação na Universidade Federal de Goiás (UFG) desde 2020/1. Participou como colaborador focado no desenvolvimento de sites e aplicativos da ELO Júnior durante um ano e meio. Adoro programar e jogar.",
          past: "PASSADO",
          pastDescription:
             "Sempre fui apaixonado por computação, mas minha vontade de programar surgiu quando ingressei na universidade. Escolhi Engenharia de Computação com o objetivo de encontrar a área em que me encaixasse melhor, não me via como programador.",

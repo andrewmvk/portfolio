@@ -65,6 +65,17 @@ export default React.forwardRef((props, ref) => {
       // Set the function on the global ref so other components can call it
       // In this case, the function will be called when the user clicks in the planet ("PlanetsScreen")
       ref.current.others.setShowProject = handleShowProject;
+
+      const keyDown = event => {
+         if (event.keyCode === 27) {
+            handleShowProject("none", false);
+         }
+      };
+      document.addEventListener("keydown", keyDown);
+
+      return () => {
+         document.removeEventListener("keydown", keyDown);
+      };
    }, []);
 
    const handleScroll = e => {

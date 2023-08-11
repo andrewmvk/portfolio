@@ -119,15 +119,6 @@ ul {
    }
 }
 
-.hand-icon {
-   color: white;
-   position: absolute;
-   right: 5%;
-   bottom: 10%;
-   transform-origin: right bottom;
-   animation: movement 2s ease infinite;
-}
-
 .shadow-div {
    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
 }

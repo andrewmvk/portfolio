@@ -26,7 +26,7 @@ const CustomSphere = React.forwardRef(
       const meshRef = useRef();
 
       useEffect(() => {
-         document.body.style.cursor = hovered ? "pointer" : "auto";
+         document.body.style.cursor = hovered ? "pointer" : "grab";
       }, [hovered]);
 
       if (ref) {

@@ -45,6 +45,19 @@ export default React.forwardRef((props, ref) => {
       button: "",
    });
 
+   useEffect(() => {
+      const keyDown = event => {
+         if (event.keyCode === 27) {
+            handleExitPress();
+         }
+      };
+      document.addEventListener("keydown", keyDown);
+
+      return () => {
+         document.removeEventListener("keydown", keyDown);
+      };
+   }, []);
+
    const handleLangChange = () => {
       const selected = ref.current.tools.selected;
       const locale = ref.current.locales.data[ref.current.locales.selected];

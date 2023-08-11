@@ -52,7 +52,17 @@ export default React.forwardRef((props, ref) => {
 
    useEffect(() => {
       ref.current.others.setShowBiography = handleShowBiography;
-   });
+      const keyDown = event => {
+         if (event.keyCode === 27) {
+            handleButtonClick({ target: { checked: false } }, true);
+         }
+      };
+      document.addEventListener("keydown", keyDown);
+
+      return () => {
+         document.removeEventListener("keydown", keyDown);
+      };
+   }, []);
 
    const handleButtonClick = (e, closeIcon = false) => {
       ref.current.locales.remount = handleSetTexts;

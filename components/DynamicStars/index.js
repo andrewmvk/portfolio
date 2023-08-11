@@ -24,7 +24,7 @@ const Word = React.forwardRef(
       };
 
       const out = () => {
-         document.body.style.cursor = "default";
+         document.body.style.cursor = "grab";
          titleRef.current.style.color = "white";
          circleRef.current.style.transform = "scale(1)";
       };
