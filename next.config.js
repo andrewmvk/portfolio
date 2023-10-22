@@ -7,11 +7,7 @@ const nextConfig = {
    compiler: {
       styledComponents: true,
    },
-   images: {
-      loader: "akamai",
-      path: "",
-   },
-   assetPrefix: "https://andrewmvk.github.io/portfolio/",
+   export: "export",
 };
 
 module.exports = nextConfig;
