@@ -182,9 +182,9 @@ export default function Home() {
          running: false,
       },
       tools: {
-         //The selected value is the current selected star, it can goes from 0 to the toolsData length (index)
+         //The selected value is the current selected star, it can goes from 0 to the technolie index
          selected: null,
-         data: toolsData,
+         data: locales.ptBR.technologies,
       },
       screen: {
          changeScreen: functionNotSetted,
