@@ -11,7 +11,7 @@ const nextConfig = {
       loader: "akamai",
       path: "",
    },
-   assetPrefix: "./",
+   assetPrefix: "https://andrewmvk.github.io/portfolio/",
 };
 
 module.exports = nextConfig;
