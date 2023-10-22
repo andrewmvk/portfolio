@@ -1,32 +1,33 @@
 {
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
-  },
-  "dependencies": {
-    "@babel/traverse": "^7.23.2",
-    "@emailjs/browser": "^3.11.0",
-    "@react-three/drei": "^9.57.0",
-    "@react-three/fiber": "^8.11.6",
-    "@react-three/postprocessing": "^2.15.0",
-    "@types/three": "^0.149.0",
-    "canvas": "^2.11.0",
-    "maath": "^0.5.3",
-    "next": "latest",
-    "postprocessing": "^6.32.2",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-icons": "^4.10.1",
-    "styled-components": "^5.3.8",
-    "three": "^0.150.1"
-  },
-  "resolutions": {
-    "styled-components": "^5"
-  },
-  "devDependencies": {
-    "@types/node": "18.15.0",
-    "typescript": "4.9.5"
-  }
+   "private": true,
+   "scripts": {
+      "dev": "next dev",
+      "build": "next build",
+      "start": "next start",
+      "export": "next export"
+   },
+   "dependencies": {
+      "@babel/traverse": "^7.23.2",
+      "@emailjs/browser": "^3.11.0",
+      "@react-three/drei": "^9.57.0",
+      "@react-three/fiber": "^8.11.6",
+      "@react-three/postprocessing": "^2.15.0",
+      "@types/three": "^0.149.0",
+      "canvas": "^2.11.0",
+      "maath": "^0.5.3",
+      "next": "latest",
+      "postprocessing": "^6.32.2",
+      "react": "18.2.0",
+      "react-dom": "18.2.0",
+      "react-icons": "^4.10.1",
+      "styled-components": "^5.3.8",
+      "three": "^0.150.1"
+   },
+   "resolutions": {
+      "styled-components": "^5"
+   },
+   "devDependencies": {
+      "@types/node": "18.15.0",
+      "typescript": "4.9.5"
+   }
 }
