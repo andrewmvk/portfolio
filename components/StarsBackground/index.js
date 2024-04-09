@@ -1,21 +1,25 @@
 import { Segment, Segments } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import React, { useMemo, useRef } from "react";
+import * as THREE from "three";
 import StaticStars from "../StaticStars";
 
 const amount = 6000; //Stars amount
 const boxSize = 3000; //Stars spread radius
-const rotation = 0.001; //Stars rotation over time
+const baseRotation = 0.1; //Stars rotation over time
 const maxTailLength = 50; //The maximum length of the star's tail
 
 export default React.forwardRef(({ tail = false }, ref) => {
    const starRef = useRef([]);
    const segmentsRef = useRef([]);
+   const clock = new THREE.Clock();
 
    useFrame(() => {
       if (starRef.current) {
+         const delta = clock.getDelta();
+         const rotation = baseRotation * delta;
          const initialVelocity = ref.current.stars.initialVelocity;
-         const currentVelocity = ref.current.stars.currentVelocity;
+         const currentVelocity = ref.current.stars.currentVelocity * delta;
          const maxVelocity = ref.current.stars.maxVelocity;
 
          starRef.current.forEach(group => {
@@ -37,12 +41,12 @@ export default React.forwardRef(({ tail = false }, ref) => {
                //Opacity mapped relative to the stars velocity
                points.material.opacity = newOpacity * 0.5;
 
-               //Here the stars segment starts to appear and become more thick (if it is activated)
+               //Here the stars segment starts to appear and become more thick (if it is enabled, disabled by default)
                if (tail) {
                   const segment = group.children[1];
                   segment.material.linewidth = Math.min(
                      0.6,
-                     segment.material.linewidth + currentVelocity * 0.0008
+                     segment.material.linewidth + currentVelocity * 0.08
                   );
                }
             }

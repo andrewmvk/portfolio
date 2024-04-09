@@ -121,8 +121,10 @@ const Effects = React.forwardRef((props, ref) => {
    useFrame(() => {
       const illusionPage = ref.current.cameraSettings.illusionPage;
       if (illusionPage && density !== densityProps.max) {
+         //set the density of the sun rays to max, so they are visible from the distance
          setDensity(densityProps.max);
       } else if (!illusionPage && density !== densityProps.min) {
+         //set the density of the sun rays to min, so it doesn't hurt the eyes ;)
          setDensity(densityProps.min);
       }
 
@@ -175,10 +177,10 @@ export default function Home() {
       //This is the first screen reference, used to change the stars velocity with a certain acceleration
       stars: {
          sun: null,
-         initialVelocity: 1,
-         currentVelocity: 1,
-         maxVelocity: 25,
-         acceleration: 0.05,
+         initialVelocity: 100,
+         currentVelocity: 100,
+         maxVelocity: 2500,
+         acceleration: 5,
          running: false,
       },
       tools: {

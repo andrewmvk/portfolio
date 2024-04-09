@@ -187,6 +187,7 @@ export default React.forwardRef((props, ref) => {
                </TextContainer>
                <ImageContainer ref={imagesRef}>
                   <Image
+                     img-number="1"
                      src={"./projects/euquero/about.png"}
                      style={{
                         transform: "translate(-40%, -16%)",
@@ -194,6 +195,7 @@ export default React.forwardRef((props, ref) => {
                      }}
                   />
                   <Image
+                     img-number="2"
                      src={"./projects/euquero/scorecards.png"}
                      style={{
                         transform: "translate(-30%, -12%)",
@@ -201,6 +203,7 @@ export default React.forwardRef((props, ref) => {
                      }}
                   />
                   <Image
+                     img-number="3"
                      src={"./projects/euquero/map-preview.png"}
                      style={{
                         transform: "translate(-20%, -8%)",
@@ -208,6 +211,7 @@ export default React.forwardRef((props, ref) => {
                      }}
                   />
                   <Image
+                     img-number="4"
                      src={"./projects/euquero/states.png"}
                      style={{
                         transform: "translate(-10%, -4%)",
@@ -215,6 +219,7 @@ export default React.forwardRef((props, ref) => {
                      }}
                   />
                   <Image
+                     img-number="5"
                      src={"./projects/euquero/home.png"}
                      style={{ transform: "translate(0%,0%)", opacity: "100%" }}
                   />

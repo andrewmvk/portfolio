@@ -71,21 +71,23 @@ export const StarsScreenHtml = React.forwardRef(({ handleTransition }, ref) => {
 });
 
 const StarsScreen = React.forwardRef((props, ref) => {
+   const clock = new THREE.Clock();
    const posRef = useRef();
    const mouseRef = useRef({ x: 0, y: 0 });
 
    useFrame(() => {
       if (posRef.current) {
+         const delta = clock.getDelta();
          //smothing the mouse position change event
          const valueX = THREE.MathUtils.lerp(
             mouseRef.current.x,
             ref.current.mouseTrack.x,
-            0.1
+            1 - 0.01 ** delta
          );
          const valueY = THREE.MathUtils.lerp(
             mouseRef.current.y,
             ref.current.mouseTrack.y,
-            0.1
+            1 - 0.01 ** delta
          );
 
          mouseRef.current = { x: valueX, y: valueY };

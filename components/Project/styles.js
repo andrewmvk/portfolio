@@ -21,7 +21,7 @@ export const Container = styled.div`
    transform: translate(-50%, -50%);
    grid-template-columns: repeat(2, 1fr);
    width: 50vw;
-   height: 80vh;
+   min-height: 80%;
    border-radius: 20px;
    animation: initializeProject ease 250ms;
    background: radial-gradient(
@@ -119,7 +119,7 @@ export const TextContainer = styled.div`
    grid-column-end: 3;
    grid-row-start: 2;
    grid-row-end: 10;
-   padding: 20px 60px 20px 20px;
+   padding: 20px 60px 40px 20px;
    animation: initializeText ease 1s;
 
    p {
@@ -175,6 +175,18 @@ export const TextContainer = styled.div`
 
       * {
          cursor: pointer;
+      }
+   }
+
+   @media screen and (max-height: 800px) {
+      p {
+         max-height: 220px;
+      }
+   }
+
+   @media screen and (max-height: 700px) {
+      p {
+         max-height: 190px;
       }
    }
 
@@ -234,17 +246,18 @@ export const ImageContainer = styled.div`
    grid-row-end: 10;
    display: flex;
    flex-direction: row;
-   justify-content: right;
-   padding: 8% 4%;
+   justify-content: center;
+   align-items: center;
    z-index: 0;
    animation: initializeImages ease 1s;
 `;
 
 export const Image = styled.img`
-   width: 13vw;
    box-shadow: -4px -4px 5px rgba(0, 0, 0, 0.15);
    border-radius: 25px;
    position: absolute;
    transition: all 0.3s ease;
    padding: 3px;
+   width: auto;
+   height: calc(80% - 50px);
 `;

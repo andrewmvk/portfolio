@@ -55,7 +55,6 @@ export default React.forwardRef((props, ref) => {
 
    return (
       <Container className="shadow-div glass">
-         <h2>FERRAMENTAS</h2>
          <SearchList
             technologies={technologies}
             handleItemClick={handleItemClick}

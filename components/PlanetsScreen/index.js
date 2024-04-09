@@ -8,6 +8,7 @@ import DynamicStars from "../DynamicStars";
 export default React.forwardRef((props, ref) => {
    const cameraRef = useRef();
    const { camera } = useThree();
+   const clock = new THREE.Clock();
 
    const calcDistance = () => {
       const position = cameraRef.current.object.position;
@@ -19,28 +20,46 @@ export default React.forwardRef((props, ref) => {
       return distance;
    };
 
-   const adjustCameraPosition = (maxDistance = 220, position) => {
+   const adjustCameraPosition = (
+      maxDistance = 220,
+      position,
+      deltaTime = 0.1
+   ) => {
       const distance = calcDistance();
 
       if (distance < maxDistance - 20 || distance > maxDistance + 20) {
-         for (let coord in position) {
-            position[coord] = THREE.MathUtils.lerp(
-               position[coord],
-               maxDistance / Math.sqrt(3),
-               0.01
-            );
-         }
+         //From cartesian to espherical coordinates (in radians)
+         const r = Math.sqrt(
+            position.x ** 2 + position.y ** 2 + position.z ** 2
+         );
+         const phi = Math.atan2(position.y, position.x);
+         const theta = Math.atan2(
+            Math.sqrt(position.x ** 2 + position.y ** 2),
+            position.z
+         );
+
+         const newRadius = THREE.MathUtils.lerp(
+            r,
+            maxDistance,
+            1 - 0.2 ** deltaTime
+         );
+
+         //Then from espherical to cartesian coordinates
+         position.x = newRadius * Math.sin(theta) * Math.cos(phi);
+         position.y = newRadius * Math.sin(theta) * Math.sin(phi);
+         position.z = newRadius * Math.cos(theta);
       }
    };
 
    useFrame(() => {
+      const delta = clock.getDelta();
       const pos = ref.current.cameraSettings.lookingAt;
       const target = cameraRef.current.target;
       for (let coord in target) {
          target[coord] = THREE.MathUtils.lerp(
             cameraRef.current.target[coord],
             pos[coord] / 1.5,
-            0.02
+            1 - 0.3 ** delta
          );
       }
 
@@ -53,13 +72,14 @@ export default React.forwardRef((props, ref) => {
             if (distance < maxDistance - 20) {
                adjustCameraPosition(
                   cameraRef.current.maxDistance,
-                  cameraRef.current.object.position
+                  cameraRef.current.object.position,
+                  delta
                );
             } else {
                cameraRef.current.minDistance = maxDistance - 20;
             }
          } else if (distance > 240) {
-            adjustCameraPosition(220, cameraRef.current.object.position);
+            adjustCameraPosition(220, cameraRef.current.object.position, delta);
          } else {
             cameraRef.current.maxDistance = 240;
          }
