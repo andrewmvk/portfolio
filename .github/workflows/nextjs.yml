@@ -75,9 +75,9 @@ jobs:
               run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
             - name: Debug Environment Variables
               run: |
-                  echo "NEXT_PUBLIC_SERVICE_ID=${{ secrets.NEXT_PUBLIC_SERVICE_ID }}"
-                  echo "NEXT_PUBLIC_TEMPLATE_ID=${{ secrets.NEXT_PUBLIC_TEMPLATE_ID }}"
-                  echo "NEXT_PUBLIC_USER_ID=${{ secrets.NEXT_PUBLIC_USER_ID }}"
+                  echo "SERVICE_ID=${{ secrets.NEXT_PUBLIC_SERVICE_ID }}"
+                  echo "TEMPLATE_ID=${{ secrets.NEXT_PUBLIC_TEMPLATE_ID }}"
+                  echo "USER_ID=${{ secrets.NEXT_PUBLIC_USER_ID }}"
             - name: Build with Next.js
               run: ${{ steps.detect-package-manager.outputs.runner }} next build
               env:
